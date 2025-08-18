@@ -106,24 +106,28 @@ function ensureFooterHomeLink(){
 /* ——— 3) Плавающая кнопка AI + мини-панель чата ——— */
 function injectAIFabAndPanel(){
   const body = document.body;
-  // Создаём FAB, если ещё нет
   if(!document.querySelector(".ai-fab")){
     const fab = document.createElement("button");
     fab.className = "ai-fab";
     fab.type = "button";
     fab.innerHTML = "<span>AI</span>";
-    body.appendChild(fab);
-    body.classList.add("ai-ready");
 
-    // Перетаскивание FAB (desktop/mobile)
+    // Покажем FAB даже без CSS-класса ai-ready
+    fab.style.display = "grid";            // ✅ принудительно видно
+    fab.style.position = "fixed";
+    fab.style.right = "20px";
+    fab.style.bottom = "20px";
+
+    body.appendChild(fab);
+    body.classList.add("ai-ready");        // чтобы работала стилизация, если правило есть
+
     makeDraggableFab(fab);
 
-    // Щёлк — открыть/закрыть панель
     fab.addEventListener("click", () => {
       const open = body.classList.toggle("ai-open");
       if(open){
-        ensureAIPanel(); // лениво создаём при первом открытии
-        setTimeout(()=> {
+        ensureAIPanel();
+        setTimeout(()=>{
           const input = document.getElementById("aiqyn-fab-input");
           if(input) input.focus();
         }, 0);
