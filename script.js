@@ -3,10 +3,7 @@ const KEY = "aiqynai_user";
 
 function loadUser(){
   try{ return JSON.parse(localStorage.getItem(KEY)) || {
-    name:"",
-    points:0,
-    badges:[],
-    firsts:{chat:false, letter:false}
+    { name:"", goal:"", points:0, badges:[], firsts:{chat:false, letter:false} }
   }; }catch(e){ return {name:"",points:0,badges:[],firsts:{chat:false,letter:false}};}
 }
 function saveUser(u){ localStorage.setItem(KEY, JSON.stringify(u)); }
@@ -51,4 +48,14 @@ function demoAIReply(text){
   if(/sat/.test(t)) return "Демо: SAT — тренируй Math по темам и читай EBRW каждый день. Скоро будут генераторы.";
   if(/универ|univ|вуз/.test(t)) return "Демо: выбери страну/язык/бюджет — бот подскажет список. В полной версии — персональный подбор.";
   return "Демо-ответ: скоро здесь будет настоящий AI-помощник с разбором и советами.";
+}
+function setGoal(goal){
+  const u = loadUser();
+  u.goal = String(goal||"").trim();
+  saveUser(u);
+  updatePointsUI();
+}
+
+function getUser(){
+  return loadUser();
 }
