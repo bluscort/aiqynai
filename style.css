@@ -1,0 +1,76 @@
+/* === AiqynAI base styles === */
+:root{
+  --brand:#42AAFF;     /* фирменный синий */
+  --accent:#ff7b00;    /* тёплый акцент (по желанию) */
+  --ink:#1f2937;       /* текст */
+  --bg:#f5f7fa;        /* фон */
+  --muted:#6b7280;     /* вторичный текст */
+  --white:#fff;
+  --border:#e5e7eb;
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+/* Шапка и навигация */
+.site-header{
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  position: sticky; top:0; z-index:10;
+}
+.brand{ display:flex; align-items:center; gap:10px; font-weight:800; }
+.logo{ font-size:22px; }
+.title{ font-size:18px; letter-spacing: .3px; }
+
+.nav a{
+  text-decoration:none; color: var(--ink);
+  margin-left:12px; padding:8px 10px; border-radius:8px;
+}
+.nav a:hover{ background:#f0f4f8; }
+.nav a.active{ background: var(--brand); color: var(--white); }
+
+/* Контейнер и заголовки */
+.container{ max-width: 1040px; margin: 24px auto; padding: 0 16px; }
+h1{ margin: 0 0 12px; font-size: 28px; }
+h2{ margin: 24px 0 10px; }
+
+/* Сетка карточек */
+.grid{
+  display:grid; gap:16px; margin-top: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.card{
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding:16px; color: var(--ink); text-decoration:none;
+  transition: transform .08s ease, box-shadow .08s ease;
+}
+.card:hover{ transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.06); }
+.card h3{ margin:0 0 8px; }
+
+/* Кнопки */
+.btn{
+  display:inline-block; padding:10px 14px; border-radius:10px;
+  background: var(--brand); color: var(--white); text-decoration:none; font-weight:600;
+  border:0; cursor:pointer;
+}
+.btn.secondary{ background:#111827; }
+.btn.ghost{ background:transparent; color: var(--brand); border:1px solid var(--brand); }
+.btn.disabled{ opacity:.55; cursor:not-allowed; }
+
+/* Листы */
+.list{ padding-left: 18px; }
+
+/* Футер */
+.site-footer{
+  text-align:center; color:#94a3b8; font-size: 14px; padding: 28px 16px;
+}
