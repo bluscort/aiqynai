@@ -1,102 +1,42 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>AiqynAI — Помощник</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .chat{ max-width: 840px; margin: 20px auto; }
-    .chat-window{
-      background: var(--white); border:1px solid var(--border); border-radius:14px;
-      height: 420px; overflow-y:auto; padding:14px;
-    }
-    .msg{ margin:8px 0; display:flex; gap:8px; }
-    .msg.me{ justify-content: flex-end; }
-    .bubble{
-      max-width: 72%; padding:10px 12px; border-radius:12px; border:1px solid var(--border);
-      background:#fff;
-    }
-    .me .bubble{ background:#eef6ff; border-color:#dbeafe; }
-    .inputbar{ display:flex; gap:8px; margin-top:12px; }
-    .inputbar input{ flex:1; padding:10px 12px; border:1px solid var(--border); border-radius:10px; }
-  </style>
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AiqynAI — AI</title><link rel="stylesheet" href="style.css"/>
+<style>
+.chat{max-width:840px;margin:20px auto}.chat-window{background:#fff;border:1px solid var(--border);border-radius:14px;height:420px;overflow-y:auto;padding:14px}.msg{margin:8px 0;display:flex;gap:8px}.msg.me{justify-content:flex-end}.bubble{max-width:72%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:#fff}.me .bubble{background:#eef6ff;border-color:#dbeafe}.inputbar{display:flex;gap:8px;margin-top:12px}.inputbar input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:10px}
+</style>
 </head>
 <body>
-  <header class="site-header">
+<header class="site-header">
   <div class="brand"><span class="logo">✨</span><span class="title">AiqynAI</span></div>
   <nav class="nav">
-    <a href="index.html">Home</a>
-    <a href="tests.html">Tests</a>
-    <a href="universities.html">Universities</a>
-    <a href="blog.html">Blog</a>
-    <a href="about.html">About</a>
+    <a href="index.html">Home</a><a href="tests.html">Tests</a>
+    <a href="universities.html">Universities</a><a href="blog.html">Blog</a><a href="about.html">About</a>
     <a href="ai.html" class="active">AI</a>
-    <a href="assistant.html">Assistant</a>
-    <a href="rewards.html">Rewards</a>
-    <a href="pricing.html">Pricing</a>
-    <a href="faq.html">FAQ</a>
-    <a href="contacts.html">Contacts</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="terms.html">Terms</a>
-  </nav>
-  <div id="pointsDisplay" class="points">⭐ 0</div>
+    <a href="assistant.html">Assistant</a><a href="rewards.html">Rewards</a>
+    <a href="pricing.html">Pricing</a><a href="faq.html">FAQ</a><a href="contacts.html">Contacts</a>
+    <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="profile.html">Profile</a><a href="letters.html">Letters</a>
+  </nav><div id="pointsDisplay" class="points">⭐ 0</div>
 </header>
-
-  <main class="container">
-    <h1>AI-помощник (демо)</h1>
-    <p>Напиши вопрос: ЕНТ, IELTS, SAT, вузы, документы — пока это демо-версия без реального ИИ.</p>
-
-    <section class="chat">
-      <div id="chat" class="chat-window" aria-live="polite"></div>
-      <div class="inputbar">
-        <input id="chatInput" type="text" placeholder="Введите вопрос..." />
-        <button class="btn" id="sendBtn">Отправить</button>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">© 2025 AiqynAI</footer>
-
-  <script src="script.js"></script>
-  <script>
-    const box = document.getElementById('chat');
-    const input = document.getElementById('chatInput');
-    const sendBtn = document.getElementById('sendBtn');
-
-    function addMsg(text, who="bot"){
-      const wrap = document.createElement('div');
-      wrap.className = 'msg ' + (who==="me"?"me":"bot");
-      const b = document.createElement('div');
-      b.className = 'bubble';
-      b.textContent = text;
-      wrap.appendChild(b);
-      box.appendChild(wrap);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function onSend(){
-      const text = input.value.trim();
-      if(!text) return;
-      addMsg(text, "me");
-      input.value = "";
-
-      // начислим очки за первый вопрос в чат
-      const u = loadUser();
-      if(!u.firsts.chat){ u.firsts.chat = true; saveUser(u); addPoints(20, "first_chat"); }
-
-      // демо-ответ
-      setTimeout(()=>{
-        addMsg(demoAIReply(text), "bot");
-      }, 300);
-    }
-
-    sendBtn.addEventListener('click', onSend);
-    input.addEventListener('keydown', (e)=>{ if(e.key==="Enter") onSend(); });
-
-    // приветствие
-    const u = loadUser();
-    addMsg(`Привет${u.name?`, ${u.name}`:""}! Это демо-чат. Спроси про ЕНТ/IELTS/SAT или вузы.`, "bot");
-  </script>
-</body>
-</html>
+<main class="container">
+  <h1>AI-помощник (демо)</h1>
+  <section class="chat">
+    <div id="chat" class="chat-window" aria-live="polite"></div>
+    <div class="inputbar">
+      <input id="chatInput" type="text" placeholder="Спроси про ЕНТ/IELTS/SAT или вузы..." />
+      <button class="btn" id="sendBtn">Отправить</button>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">© 2025 AiqynAI</footer>
+<script src="script.js"></script>
+<script>
+  const box=document.getElementById('chat');
+  const input=document.getElementById('chatInput');
+  function addMsg(text,who="bot"){const w=document.createElement('div');w.className='msg '+(who==="me"?"me":"bot");const b=document.createElement('div');b.className='bubble';b.textContent=text;w.appendChild(b);box.appendChild(w);box.scrollTop=box.scrollHeight;}
+  function onSend(){const t=input.value.trim(); if(!t) return; addMsg(t,"me"); input.value=""; const u=loadUser(); if(!u.firsts.chat){u.firsts.chat=true; saveUser(u); addPoints(20,"first_chat");} setTimeout(()=>addMsg(demoAIReply(t),"bot"),300);}
+  document.getElementById('sendBtn').addEventListener('click',onSend);
+  input.addEventListener('keydown',(e)=>{ if(e.key==="Enter") onSend(); });
+  const u=loadUser(); addMsg(`Привет${u.name?`, ${u.name}`:""}! Демо-чат.`, "bot");
+</script>
+</body></html>
