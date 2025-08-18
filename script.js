@@ -1,4 +1,8 @@
-// === AiqynAI basic client state (localStorage) ===
+// ================================
+// AiqynAI — Global Client Script
+// ================================
+
+// ---- User state in localStorage ----
 const KEY = "aiqynai_user";
 
 function loadUser(){
@@ -16,11 +20,13 @@ function getUser(){ return loadUser(); }
 function addPoints(n, reason=""){
   const u = loadUser();
   u.points += n;
+
+  // thresholds → auto-badges
   const earned = [];
   const thresholds = [
-    {p:50, id:"starter", label:"Starter"},
+    {p:50,  id:"starter",  label:"Starter"},
     {p:150, id:"explorer", label:"Explorer"},
-    {p:300, id:"achiever", label:"Achiever"}
+    {p:300, id:"achiever", label:"Achiever"},
   ];
   thresholds.forEach(t=>{
     if(u.points>=t.p && !u.badges.includes(t.id)){
@@ -28,15 +34,21 @@ function addPoints(n, reason=""){
       earned.push(t.label);
     }
   });
+
   saveUser(u);
   updatePointsUI();
   return earned;
 }
+
 function updatePointsUI(){
   const u = loadUser();
   const el = document.getElementById("pointsDisplay");
-  if(el){ el.textContent = `⭐ ${u.points}`; el.title = `Badges: ${u.badges.join(", ")||"—"}`; }
+  if(el){
+    el.textContent = `⭐ ${u.points}`;
+    el.title = `Badges: ${u.badges.join(", ") || "—"}`;
+  }
 }
+
 function setName(name){
   const u = loadUser();
   u.name = String(name||"").trim();
@@ -50,29 +62,33 @@ function setGoal(goal){
   updatePointsUI();
 }
 
-// Demo AI reply
+// ---- Demo AI reply router (placeholder) ----
 function demoAIReply(text){
-  const t = text.toLowerCase();
-  if(/ент|en[nt]/.test(t)) return "Демо: начни с плана по предметам ЕНТ и решай таймированно. Скоро подключим ИИ.";
-  if(/ielts/.test(t)) return "Демо: для IELTS уделяй 60% Writing/Speaking, 40% Reading/Listening. В релизе бот даст разбор.";
-  if(/sat/.test(t)) return "Демо: SAT — тренируй Math по темам и читай EBRW каждый день. Скоро будут генераторы.";
+  const t = (text||"").toLowerCase();
+  if(/ент|en[nt]/.test(t))   return "Демо: начни с плана по предметам ЕНТ и решай таймированно. Скоро подключим ИИ.";
+  if(/ielts/.test(t))        return "Демо: для IELTS уделяй 60% Writing/Speaking, 40% Reading/Listening. В релизе бот даст разбор.";
+  if(/sat/.test(t))          return "Демо: SAT — тренируй Math по темам и читай EBRW каждый день. Скоро будут генераторы.";
   if(/универ|univ|вуз/.test(t)) return "Демо: выбери страну/язык/бюджет — бот подскажет список. В полной версии — персональный подбор.";
+  if(/письм|letter/.test(t)) return "Демо: открой 'Letters' и сгенерируй черновик; дальше подключим ИИ-редактор.";
   return "Демо-ответ: скоро здесь будет настоящий AI-помощник с разбором и советами.";
 }
 
-document.addEventListener("DOMContentLoaded", updatePointsUI);
-// ============== AiqynAI: Brand/Home link + Floating AI (no HTML edits) ==============
+// ---- Init basic UI on page load ----
 document.addEventListener("DOMContentLoaded", () => {
+  updatePointsUI();
   makeHeaderBrandClickable();
   ensureFooterHomeLink();
   injectAIFabAndPanel();
 });
 
-/* ——— 1) Лого в шапке = ссылка «Домой» ——— */
+// ===============================
+// Enhancements (no HTML editing)
+// ===============================
+
+// 1) Header brand → go Home
 function makeHeaderBrandClickable(){
   const brand = document.querySelector(".site-header .brand");
   if(!brand) return;
-  // если уже навешено — выходим
   if(brand.dataset.homeBound === "1") return;
   brand.dataset.homeBound = "1";
   brand.style.cursor = "pointer";
@@ -80,7 +96,6 @@ function makeHeaderBrandClickable(){
   brand.setAttribute("role", "link");
   brand.setAttribute("aria-label", "Go to Home");
   const goHome = (e) => {
-    // не ломаем клик по навигации рядом
     if(e && e.target && e.target.closest && e.target.closest(".nav")) return;
     window.location.href = "index.html";
   };
@@ -88,7 +103,7 @@ function makeHeaderBrandClickable(){
   brand.addEventListener("keydown", (e)=>{ if(e.key === "Enter" || e.key === " ") goHome(e); });
 }
 
-/* ——— 2) Ссылка «AiqynAI → Home» в футере ——— */
+// 2) Footer: prepend "AiqynAI" → Home
 function ensureFooterHomeLink(){
   const footer = document.querySelector(".site-footer");
   if(!footer) return;
@@ -99,34 +114,35 @@ function ensureFooterHomeLink(){
   a.className = "home-link";
   a.style.marginRight = "6px";
   a.style.fontWeight = "700";
-  // вставим в начало футера
   footer.prepend(a, document.createTextNode(" "));
 }
 
-/* ——— 3) Плавающая кнопка AI + мини-панель чата ——— */
+// 3) Floating AI Button (FAB) + mini chat panel
 function injectAIFabAndPanel(){
   const body = document.body;
+
   if(!document.querySelector(".ai-fab")){
     const fab = document.createElement("button");
     fab.className = "ai-fab";
     fab.type = "button";
     fab.innerHTML = "<span>AI</span>";
 
-    // Покажем FAB даже без CSS-класса ai-ready
-    fab.style.display = "grid";            // ✅ принудительно видно
+    // show it even if CSS rule is missing
+    fab.style.display = "grid";
     fab.style.position = "fixed";
     fab.style.right = "20px";
     fab.style.bottom = "20px";
 
     body.appendChild(fab);
-    body.classList.add("ai-ready");        // чтобы работала стилизация, если правило есть
+    body.classList.add("ai-ready"); // for CSS styling if present
 
     makeDraggableFab(fab);
 
     fab.addEventListener("click", () => {
       const open = body.classList.toggle("ai-open");
       if(open){
-        ensureAIPanel();
+        aiqynClearNotif();          // remove ping on open
+        ensureAIPanel();            // lazy-create panel
         setTimeout(()=>{
           const input = document.getElementById("aiqyn-fab-input");
           if(input) input.focus();
@@ -136,9 +152,10 @@ function injectAIFabAndPanel(){
   }
 }
 
-/* Создание панели чата один раз */
+// Create mini chat panel once (lazy)
 function ensureAIPanel(){
   if(document.querySelector(".ai-panel")) return;
+
   const panel = document.createElement("section");
   panel.className = "ai-panel";
   panel.innerHTML = `
@@ -165,16 +182,17 @@ function ensureAIPanel(){
   `;
   document.body.appendChild(panel);
 
-  // Приветствие
+  // Greeting
   const u = loadUser();
   aiPanelAddMsg(`Привет${u.name?`, ${u.name}`:""}! Это мини-чат AI. Задай вопрос или выбери подсказку ниже.`, "bot");
 
-  // Закрыть
+  // Close panel
   panel.querySelector("#aiqyn-fab-close").addEventListener("click", ()=>{
     document.body.classList.remove("ai-open");
+    aiqynClearNotif();
   });
 
-  // Chips → вставить быстрые запросы
+  // Chips → quick fill
   panel.querySelectorAll("#aiqyn-fab-chips .chip").forEach(ch=>{
     ch.addEventListener("click", ()=>{
       const input = document.getElementById("aiqyn-fab-input");
@@ -183,7 +201,7 @@ function ensureAIPanel(){
     });
   });
 
-  // Отправка
+  // Send logic
   const sendBtn = panel.querySelector("#aiqyn-fab-send");
   const inputEl = panel.querySelector("#aiqyn-fab-input");
   const onSend = ()=>{
@@ -192,7 +210,7 @@ function ensureAIPanel(){
     aiPanelAddMsg(text, "me");
     inputEl.value = "";
 
-    // +20 очков за первый чат (если ещё не было)
+    // +20 points on first chat ever
     const u = loadUser();
     if(!u.firsts.chat){
       u.firsts.chat = true;
@@ -200,16 +218,19 @@ function ensureAIPanel(){
       addPoints(20, "first_chat");
     }
 
-    // Демо-ответ (переиспользуем логику)
+    // Demo answer & notif
     setTimeout(()=>{
       aiPanelAddMsg(demoAIReply(text), "bot");
+      if(!document.body.classList.contains("ai-open")){
+        aiqynSetNotif(true); // show ping if panel is closed
+      }
     }, 300);
   };
   sendBtn.addEventListener("click", onSend);
   inputEl.addEventListener("keydown", (e)=>{ if(e.key === "Enter") onSend(); });
 }
 
-/* Добавление сообщений в мини-чат */
+// Add message to FAB panel
 function aiPanelAddMsg(text, who="bot"){
   const box = document.getElementById("aiqyn-fab-scroll");
   if(!box) return;
@@ -223,21 +244,19 @@ function aiPanelAddMsg(text, who="bot"){
   box.scrollTop = box.scrollHeight;
 }
 
-/* Перетаскивание FAB */
+// Draggable FAB
 function makeDraggableFab(el){
   let dragging = false, startX=0, startY=0, startLeft=0, startTop=0;
 
   const onPointerDown = (e)=>{
     dragging = true;
-    el.setPointerCapture(e.pointerId);
-    const rect = el.getBoundingClientRect();
-    startX = e.clientX; startY = e.clientY;
-    // переводим позиционирование на top/left для перетаскивания
+    try{ el.setPointerCapture(e.pointerId); }catch(_){}
     const cur = el.getBoundingClientRect();
-    el.style.left = cur.left + "px";
-    el.style.top  = cur.top  + "px";
-    el.style.right = "auto";
+    el.style.left   = cur.left + "px";
+    el.style.top    = cur.top  + "px";
+    el.style.right  = "auto";
     el.style.bottom = "auto";
+    startX = e.clientX; startY = e.clientY;
     startLeft = parseFloat(el.style.left) || cur.left;
     startTop  = parseFloat(el.style.top)  || cur.top;
   };
@@ -248,13 +267,14 @@ function makeDraggableFab(el){
     const dy = e.clientY - startY;
     const nl = startLeft + dx;
     const nt = startTop  + dy;
-    // границы вьюпорта
+
+    // viewport clamp
     const vw = window.innerWidth, vh = window.innerHeight;
-    const size = el.getBoundingClientRect();
-    const clampedL = Math.max(6, Math.min(vw - size.width - 6, nl));
-    const clampedT = Math.max(6, Math.min(vh - size.height - 6, nt));
-    el.style.left = clampedL + "px";
-    el.style.top  = clampedT + "px";
+    const sz = el.getBoundingClientRect();
+    const cl = Math.max(6, Math.min(vw - sz.width - 6, nl));
+    const ct = Math.max(6, Math.min(vh - sz.height - 6, nt));
+    el.style.left = cl + "px";
+    el.style.top  = ct + "px";
   };
 
   const onPointerUp = (e)=>{
@@ -269,4 +289,12 @@ function makeDraggableFab(el){
   window.addEventListener("pointermove", onPointerMove);
   window.addEventListener("pointerup", onPointerUp);
 }
+
+// FAB notification ping helpers
+function aiqynSetNotif(on=true){
+  const fab = document.querySelector(".ai-fab");
+  if(!fab) return;
+  fab.classList.toggle("has-notif", !!on);
+}
+function aiqynClearNotif(){ aiqynSetNotif(false); }
 
