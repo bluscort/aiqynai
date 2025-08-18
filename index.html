@@ -1,58 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AiqynAI</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-    header {
-      background: #42AAFF;
-      padding: 15px;
-      color: white;
-      font-size: 22px;
-    }
-    nav {
-      margin: 20px 0;
-    }
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-    }
-    button {
-      background: #42AAFF;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background: #1f90dd;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AiqynAI — Home</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    Welcome to AiqynAI
+  <header class="site-header">
+    <div class="brand">
+      <span class="logo">✨</span>
+      <span class="title">AiqynAI</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="tests.html">Tests</a>
+      <a href="universities.html">Universities</a>
+      <a href="blog.html">Blog</a>
+      <a href="about.html">About</a>
+    </nav>
   </header>
-  <nav>
-    <a href="#">Главная</a>
-    <a href="#">Курсы</a>
-    <a href="#">Контакты</a>
-  </nav>
-  <main>
-    <h1>Первая тестовая страница</h1>
-    <p>Здесь мы будем развивать проект AiqynAI</p>
-    <button>Нажми меня</button>
+
+  <main class="container">
+    <h1>Clear path to university — powered by AI</h1>
+    <p>Готовься к ЕНТ, IELTS, SAT. Узнавай требования вузов. Общайся в блоге. ИИ-помощник всегда рядом.</p>
+
+    <div class="grid">
+      <a class="card" href="tests.html">
+        <h3>Тесты →</h3>
+        <p>ЕНТ, IELTS, SAT — пробники и разбор ошибок (скоро с ИИ).</p>
+      </a>
+      <a class="card" href="universities.html">
+        <h3>Университеты →</h3>
+        <p>Базовый рейтинг, требования по языку и документам.</p>
+      </a>
+      <a class="card" href="blog.html">
+        <h3>Блог →</h3>
+        <p>Советы, опыт поступления, ответы на вопросы.</p>
+      </a>
+    </div>
+
+    <p style="margin-top:18px;">
+      <a class="btn" href="tests.html">Начать с тестов</a>
+      <a class="btn ghost" href="about.html" style="margin-left:8px;">Что такое AiqynAI?</a>
+    </p>
   </main>
+
+  <footer class="site-footer">© 2025 AiqynAI</footer>
 </body>
 </html>
