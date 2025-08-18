@@ -297,4 +297,75 @@ function aiqynSetNotif(on=true){
   fab.classList.toggle("has-notif", !!on);
 }
 function aiqynClearNotif(){ aiqynSetNotif(false); }
+// ============== Theme toggle (System / Light / Dark) — no HTML edits ==============
+(function(){
+  const THEME_KEY = "aiqynai_theme"; // 'system' | 'light' | 'dark'
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+  const MODES = ["system","light","dark"];
+  const ICON  = { system:"🖥️", light:"☀️", dark:"🌙" };
+  const LABEL = {
+    system: "Theme: System (auto)",
+    light:  "Theme: Light",
+    dark:   "Theme: Dark"
+  };
+
+  function loadPref(){ return localStorage.getItem(THEME_KEY) || "system"; }
+  function savePref(v){ localStorage.setItem(THEME_KEY, v); }
+
+  function applyTheme(mode){
+    document.body.classList.remove("theme-light","theme-dark");
+    // 'system' = без классов (используем prefers-color-scheme + твой CSS)
+    if(mode === "light") document.body.classList.add("theme-light");
+    if(mode === "dark")  document.body.classList.add("theme-dark");
+  }
+
+  // реагируем на смену системной темы, если выбран режим 'system'
+  media.addEventListener?.("change", () => {
+    if(loadPref()==="system") applyTheme("system");
+  });
+
+  function cycle(mode){
+    const i = MODES.indexOf(mode);
+    return MODES[(i+1) % MODES.length];
+  }
+
+  function injectToggle(){
+    const header = document.querySelector(".site-header");
+    if(!header || header.querySelector(".theme-toggle")) return;
+
+    const btn = document.createElement("button");
+    btn.className = "btn ghost theme-toggle";
+    btn.style.padding = "6px 10px";
+    btn.style.borderRadius = "10px";
+    btn.style.marginLeft = "8px";
+
+    // где разместить: рядом со счётчиком очков, если есть
+    const points = document.getElementById("pointsDisplay");
+    if(points && points.parentElement === header){
+      header.insertBefore(btn, points.nextSibling);
+    }else{
+      header.appendChild(btn);
+    }
+
+    const setBtnUI = (mode)=>{
+      btn.textContent = ICON[mode] + " " + mode.toUpperCase();
+      btn.setAttribute("aria-label", LABEL[mode]);
+      btn.title = LABEL[mode] + " (click to change)";
+    };
+
+    let mode = loadPref();
+    applyTheme(mode);
+    setBtnUI(mode);
+
+    btn.addEventListener("click", ()=>{
+      mode = cycle(mode);
+      savePref(mode);
+      applyTheme(mode);
+      setBtnUI(mode);
+    });
+  }
+
+  // инициализация
+  document.addEventListener("DOMContentLoaded", injectToggle);
+})();
 
