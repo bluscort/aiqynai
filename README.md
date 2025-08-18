@@ -3,8 +3,11 @@ I’m building an educational platform-ecosystem "AiqynAi" for high school and c
 
 📚 The platform will include:
  • practice tests with AI-powered error analysis;
+
  • a student blog for sharing experiences;
+
  • guidance on writing motivation letters;
+
  • university rankings and personalized recommendations;
  • full AI support — from generating tests to analyzing mistakes, with no human involvement.
 
