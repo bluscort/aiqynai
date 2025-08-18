@@ -1,82 +1,38 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>AiqynAI — Letters</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .wrap{max-width:920px;margin:24px auto;}
-    .panel{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;}
-    .row{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0;}
-    .row input,.row textarea, .row select{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:10px}
-    .output{white-space:pre-wrap;background:#f8fafc;border:1px dashed var(--border);border-radius:12px;padding:12px;margin-top:12px}
-  </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AiqynAI — Letters</title><link rel="stylesheet" href="style.css"/>
+<style>.wrap{max-width:920px;margin:24px auto}.panel{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px}.row{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0}.row input,.row textarea,.row select{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:10px}.output{white-space:pre-wrap;background:#f8fafc;border:1px dashed var(--border);border-radius:12px;padding:12px;margin-top:12px}</style>
 </head>
 <body>
-  <!-- Header с активной Letters -->
-  <header class="site-header">
-    <div class="brand"><span class="logo">✨</span><span class="title">AiqynAI</span></div>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="tests.html">Tests</a>
-      <a href="universities.html">Universities</a>
-      <a href="blog.html">Blog</a>
-      <a href="about.html">About</a>
-      <a href="ai.html">AI</a>
-      <a href="assistant.html">Assistant</a>
-      <a href="rewards.html">Rewards</a>
-      <a href="pricing.html">Pricing</a>
-      <a href="faq.html">FAQ</a>
-      <a href="contacts.html">Contacts</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
-      <a href="profile.html">Profile</a>
-      <a href="letters.html" class="active">Letters</a>
-    </nav>
-    <div id="pointsDisplay" class="points">⭐ 0</div>
-  </header>
+<header class="site-header">
+  <div class="brand"><span class="logo">✨</span><span class="title">AiqynAI</span></div>
+  <nav class="nav">
+    <a href="index.html">Home</a><a href="tests.html">Tests</a><a href="universities.html">Universities</a>
+    <a href="blog.html">Blog</a><a href="about.html">About</a><a href="ai.html">AI</a><a href="assistant.html">Assistant</a>
+    <a href="rewards.html">Rewards</a><a href="pricing.html">Pricing</a><a href="faq.html">FAQ</a><a href="contacts.html">Contacts</a>
+    <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="profile.html">Profile</a><a href="letters.html" class="active">Letters</a>
+  </nav><div id="pointsDisplay" class="points">⭐ 0</div>
+</header>
+<main class="container">
+  <h1>Мотивационное письмо — генератор (демо)</h1>
+  <div class="wrap panel">
+    <div class="row"><input id="studentName" placeholder="Ваше имя"/><input id="program" placeholder="Программа (например, Computer Science)"/></div>
+    <div class="row"><input id="university" placeholder="Университет (например, NU)"/><select id="tone"><option value="formal">Тон: Формальный</option><option value="confident">Тон: Уверенный</option><option value="friendly">Тон: Дружелюбный</option></select></div>
+    <div class="row"><textarea id="achievements" rows="4" placeholder="Ключевые достижения…"></textarea></div>
+    <button class="btn" id="genBtn">Сгенерировать черновик</button>
+    <div id="result" class="output" style="display:none"></div>
+  </div>
+</main>
+<footer class="site-footer">© 2025 AiqynAI</footer>
+<script src="script.js"></script>
+<script>
+  function draftLetter({name, program, university, tone, achievements}){
+    const u=getUser(); const intro={formal:"I am writing to express my strong interest",confident:"I am excited to apply",friendly:"I would love to apply"}[tone]||"I am writing to apply";
+    return `Dear Admissions Committee,
 
-  <main class="container">
-    <h1>Мотивационное письмо — генератор (демо)</h1>
-    <div class="wrap panel">
-      <div class="row">
-        <input id="studentName" placeholder="Ваше имя" />
-        <input id="program" placeholder="Программа (например, Computer Science)" />
-      </div>
-      <div class="row">
-        <input id="university" placeholder="Университет (например, Nazarbayev University)" />
-        <select id="tone">
-          <option value="formal">Тон: Формальный</option>
-          <option value="confident">Тон: Уверенный</option>
-          <option value="friendly">Тон: Дружелюбный</option>
-        </select>
-      </div>
-      <div class="row">
-        <textarea id="achievements" rows="4" placeholder="Ключевые достижения (олимпиады, проекты, волонтёрство)…"></textarea>
-      </div>
-      <button class="btn" id="genBtn">Сгенерировать черновик</button>
-
-      <div id="result" class="output" style="display:none"></div>
-    </div>
-  </main>
-
-  <footer class="site-footer">© 2025 AiqynAI</footer>
-
-  <script src="script.js"></script>
-  <script>
-    function draftLetter({name, program, university, tone, achievements}){
-      const u = getUser();
-      const introTone = {
-        formal: "I am writing to express my strong interest",
-        confident: "I am excited to apply",
-        friendly: "I would love to apply"
-      }[tone] || "I am writing to apply";
-
-      return (
-`Dear Admissions Committee,
-
-${introTone} for the ${program} program at ${university}. My name is ${name || (u.name||"a motivated student")}, and I am determined to contribute to your academic community.
+${intro} for the ${program} program at ${university}. My name is ${name || (u.name||"a motivated student")}, and I am determined to contribute to your academic community.
 
 Highlights:
 ${achievements || "- (add your achievements here)"}
@@ -91,32 +47,12 @@ Why me:
 
 Thank you for considering my application.
 Sincerely,
-${name || (u.name||"Applicant")}`
-      );
-    }
-
-    document.getElementById('genBtn').addEventListener('click', ()=>{
-      const data = {
-        name: document.getElementById('studentName').value.trim(),
-        program: document.getElementById('program').value.trim(),
-        university: document.getElementById('university').value.trim(),
-        tone: document.getElementById('tone').value,
-        achievements: document.getElementById('achievements').value.trim()
-      };
-      const letter = draftLetter(data);
-      const out = document.getElementById('result');
-      out.style.display = 'block';
-      out.textContent = letter;
-
-      // +30 очков за первый черновик письма
-      const u = getUser();
-      if(!u.firsts.letter){
-        u.firsts.letter = true;
-        saveUser(u);
-        const earned = addPoints(30, 'first_letter');
-        if(earned.length) alert('Новый бейдж: ' + earned.join(', '));
-      }
-    });
-  </script>
-</body>
-</html>
+${name || (u.name||"Applicant")}`;
+  }
+  document.getElementById('genBtn').addEventListener('click',()=>{
+    const data={name:studentName.value.trim(),program:program.value.trim(),university:university.value.trim(),tone:tone.value,achievements:achievements.value.trim()};
+    const letter=draftLetter(data); result.style.display='block'; result.textContent=letter;
+    const u=getUser(); if(!u.firsts.letter){u.firsts.letter=true; saveUser(u); const e=addPoints(30,'first_letter'); if(e.length) alert('Новый бейдж: '+e.join(', '));}
+  });
+</script>
+</body></html>
