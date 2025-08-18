@@ -1,1 +1,1 @@
-# shyraqai
+# aiqynai
