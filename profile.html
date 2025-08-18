@@ -1,107 +1,36 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>AiqynAI — Profile</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .profile-wrap{max-width:840px;margin:24px auto;background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;}
-    .row{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0;}
-    .row input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:10px;}
-    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-    .badge{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:#f8fafc;font-size:12px}
-  </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AiqynAI — Profile</title><link rel="stylesheet" href="style.css"/>
+<style>.profile-wrap{max-width:840px;margin:24px auto;background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px}.row{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}.row input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:10px}.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.badge{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:#f8fafc;font-size:12px}</style>
 </head>
 <body>
-  <!-- Header с активной ссылкой Profile и Letters -->
-  <header class="site-header">
-    <div class="brand"><span class="logo">✨</span><span class="title">AiqynAI</span></div>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="tests.html">Tests</a>
-      <a href="universities.html">Universities</a>
-      <a href="blog.html">Blog</a>
-      <a href="about.html">About</a>
-      <a href="ai.html">AI</a>
-      <a href="assistant.html">Assistant</a>
-      <a href="rewards.html">Rewards</a>
-      <a href="pricing.html">Pricing</a>
-      <a href="faq.html">FAQ</a>
-      <a href="contacts.html">Contacts</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
-      <a href="profile.html" class="active">Profile</a>
-      <a href="letters.html">Letters</a>
-    </nav>
-    <div id="pointsDisplay" class="points">⭐ 0</div>
-  </header>
-
-  <main class="container">
-    <h1>Личный кабинет</h1>
-    <div class="profile-wrap">
-      <div class="row">
-        <input id="nameInput" type="text" placeholder="Ваше имя (например, Данияр)"/>
-        <button class="btn" id="saveName">Сохранить имя</button>
-      </div>
-      <div class="row">
-        <input id="goalInput" type="text" placeholder="Ваша цель (например, IELTS 7.0 до декабря)"/>
-        <button class="btn" id="saveGoal">Сохранить цель</button>
-      </div>
-
-      <h2 style="margin-top:14px;">Прогресс</h2>
-      <p id="progressLine">Очки: 0 • Цель: —</p>
-
-      <h2>Бейджи</h2>
-      <div class="badges" id="badgesBox"><span class="badge">—</span></div>
-    </div>
-  </main>
-
-  <footer class="site-footer">© 2025 AiqynAI</footer>
-
-  <script src="script.js"></script>
-  <script>
-    // Инициализация из localStorage
-    const u = getUser();
-    document.getElementById('nameInput').value = u.name || "";
-    document.getElementById('goalInput').value = u.goal || "";
-
-    function render(){
-      const u = getUser();
-      const line = `Очки: ${u.points} • Цель: ${u.goal || "—"}`;
-      document.getElementById('progressLine').textContent = line;
-
-      const box = document.getElementById('badgesBox');
-      box.innerHTML = "";
-      if(!u.badges || u.badges.length===0){
-        box.innerHTML = '<span class="badge">—</span>';
-      }else{
-        u.badges.forEach(id=>{
-          const span = document.createElement('span');
-          span.className='badge';
-          span.textContent = id;
-          box.appendChild(span);
-        });
-      }
-    }
-
-    document.getElementById('saveName').addEventListener('click', ()=>{
-      const val = document.getElementById('nameInput').value;
-      setName(val);
-      const earned = addPoints(10, 'set_name_first_time'); // +10 за имя (первый раз)
-      if(earned.length) alert('Новый бейдж: ' + earned.join(', '));
-      render();
-    });
-
-    document.getElementById('saveGoal').addEventListener('click', ()=>{
-      const val = document.getElementById('goalInput').value;
-      setGoal(val);
-      const earned = addPoints(10, 'set_goal_first_time'); // +10 за цель (первый раз)
-      if(earned.length) alert('Новый бейдж: ' + earned.join(', '));
-      render();
-    });
-
-    render();
-  </script>
-</body>
-</html>
+<header class="site-header">
+  <div class="brand"><span class="logo">✨</span><span class="title">AiqynAI</span></div>
+  <nav class="nav">
+    <a href="index.html">Home</a><a href="tests.html">Tests</a><a href="universities.html">Universities</a>
+    <a href="blog.html">Blog</a><a href="about.html">About</a><a href="ai.html">AI</a><a href="assistant.html">Assistant</a>
+    <a href="rewards.html">Rewards</a><a href="pricing.html">Pricing</a><a href="faq.html">FAQ</a><a href="contacts.html">Contacts</a>
+    <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="profile.html" class="active">Profile</a><a href="letters.html">Letters</a>
+  </nav><div id="pointsDisplay" class="points">⭐ 0</div>
+</header>
+<main class="container">
+  <h1>Личный кабинет</h1>
+  <div class="profile-wrap">
+    <div class="row"><input id="nameInput" placeholder="Ваше имя"/><button class="btn" id="saveName">Сохранить имя</button></div>
+    <div class="row"><input id="goalInput" placeholder="Ваша цель (например, IELTS 7.0)"/><button class="btn" id="saveGoal">Сохранить цель</button></div>
+    <h2 style="margin-top:14px;">Прогресс</h2><p id="progressLine">Очки: 0 • Цель: —</p>
+    <h2>Бейджи</h2><div class="badges" id="badgesBox"><span class="badge">—</span></div>
+  </div>
+</main>
+<footer class="site-footer">© 2025 AiqynAI</footer>
+<script src="script.js"></script>
+<script>
+  const u=getUser(); document.getElementById('nameInput').value=u.name||""; document.getElementById('goalInput').value=u.goal||"";
+  function render(){const u=getUser(); document.getElementById('progressLine').textContent=`Очки: ${u.points} • Цель: ${u.goal||"—"}`; const box=document.getElementById('badgesBox'); box.innerHTML=""; if(!u.badges||u.badges.length===0){box.innerHTML='<span class="badge">—</span>';}else{u.badges.forEach(id=>{const s=document.createElement('span'); s.className='badge'; s.textContent=id; box.appendChild(s);});}}
+  document.getElementById('saveName').addEventListener('click',()=>{setName(document.getElementById('nameInput').value); const e=addPoints(10,'set_name_first_time'); if(e.length) alert('Новый бейдж: '+e.join(', ')); render();});
+  document.getElementById('saveGoal').addEventListener('click',()=>{setGoal(document.getElementById('goalInput').value); const e=addPoints(10,'set_goal_first_time'); if(e.length) alert('Новый бейдж: '+e.join(', ')); render();});
+  render();
+</script>
+</body></html>
