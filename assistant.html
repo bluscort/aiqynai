@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AIQYN AI - Помощник</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>AIQYN AI - Помощник</h1>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="universities.html">Университеты</a>
+      <a href="tests.html">Тесты</a>
+      <a href="blog.html">Блог</a>
+      <a href="assistant.html">AI Помощник</a>
+    </nav>
+  </header>
+  
+  <main>
+    <h2>Задай вопрос нашему AI</h2>
+    <textarea id="question" placeholder="Напиши свой вопрос..."></textarea>
+    <button onclick="askAI()">Спросить</button>
+    <div id="answer"></div>
+  </main>
+  
+  <script>
+    function askAI() {
+      let q = document.getElementById("question").value;
+      let answerBox = document.getElementById("answer");
+      
+      if (q.trim() === "") {
+        answerBox.innerHTML = "Пожалуйста, напиши вопрос 🙏";
+      } else {
+        // Тут пока просто имитация ответа
+        answerBox.innerHTML = "🤖 AI думает над твоим вопросом: <b>" + q + "</b>";
+      }
+    }
+  </script>
+</body>
+</html>
