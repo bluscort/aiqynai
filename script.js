@@ -368,4 +368,85 @@ function aiqynClearNotif(){ aiqynSetNotif(false); }
   // инициализация
   document.addEventListener("DOMContentLoaded", injectToggle);
 })();
+// ============== Theme toggle (iOS-like, Light/Dark only; default = System) ==============
+(function(){
+  const KEY = "aiqynai_theme_choice"; // "light" | "dark" | null (system)
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+  function getSaved(){ return localStorage.getItem(KEY); }
+  function save(mode){ if(mode) localStorage.setItem(KEY, mode); else localStorage.removeItem(KEY); }
+
+  function apply(mode){
+    // очищаем, затем ставим класс при ручном выборе
+    document.body.classList.remove("theme-light","theme-dark");
+    if(mode === "light") document.body.classList.add("theme-light");
+    if(mode === "dark")  document.body.classList.add("theme-dark");
+    // если mode = null → System (классов нет, работает CSS @media)
+  }
+
+  function currentSystemMode(){ return media.matches ? "dark" : "light"; }
+
+  function injectSwitch(){
+    const header = document.querySelector(".site-header");
+    if(!header || header.querySelector(".theme-switch")) return;
+
+    const sw = document.createElement("div");
+    sw.className = "theme-switch";
+    sw.setAttribute("role","switch");
+    sw.setAttribute("aria-label","Theme switch");
+    sw.tabIndex = 0;
+
+    // иконки: слева ☀️ (light), справа 🌙 (dark)
+    const sun = document.createElement("span");
+    sun.className = "icon"; sun.textContent = "☀️";
+    const moon = document.createElement("span");
+    moon.className = "icon"; moon.textContent = "🌙";
+    const thumb = document.createElement("div");
+    thumb.className = "thumb";
+    sw.append(sun, moon, thumb);
+
+    // куда вставить — рядом с pointsDisplay
+    const points = document.getElementById("pointsDisplay");
+    if(points && points.parentElement === header){
+      header.insertBefore(sw, points.nextSibling);
+    }else{
+      header.appendChild(sw);
+    }
+
+    // Инициализация: если есть сохранённый выбор — применяем;
+    // если нет — отражаем визуально System (но классы не ставим).
+    const saved = getSaved();           // "light" | "dark" | null
+    if(saved === "light" || saved === "dark"){
+      apply(saved);
+      sw.dataset.mode = saved;
+      sw.setAttribute("aria-checked", saved === "dark" ? "false" : "true");
+    }else{
+      // System: визуально в положение по системе, классы не ставим
+      const sys = currentSystemMode();  // "light" | "dark"
+      sw.dataset.mode = sys;
+      sw.setAttribute("aria-checked", sys === "dark" ? "false" : "true");
+    }
+
+    // Переключение: только между light <-> dark
+    function toggle(){
+      const next = (sw.dataset.mode === "light") ? "dark" : "light";
+      sw.dataset.mode = next;
+      save(next);
+      apply(next);
+    }
+    sw.addEventListener("click", toggle);
+    sw.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" ") { e.preventDefault(); toggle(); } });
+
+    // Если пользователь не выбирал (System), и система поменялась — двигаем только визуально
+    media.addEventListener?.("change", ()=>{
+      const saved2 = getSaved();
+      if(saved2 === null){
+        const sys = currentSystemMode();
+        sw.dataset.mode = sys; // только UI; классы не ставим
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", injectSwitch);
+})();
 
