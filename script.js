@@ -32,7 +32,7 @@ function demoAIReply(text){
   if(/ielts/.test(t))        return "Демо: IELTS — фокус 60% Writing/Speaking, 40% Reading/Listening.";
   if(/sat/.test(t))          return "Демо: SAT — ежедневные Math и чтение EBRW.";
   if(/универ|вуз|univ/.test(t)) return "Демо: укажи страну/язык/бюджет — подберу варианты.";
-  if(/мотивацион|cover|motivation/.test(t)) return "Открой мастер «Мотивационное письмо» ниже на странице AI.";
+  if(/мотивацион|cover|motivation/.test(t)) return "Открой мастер «Мотивационное письмо» справа на странице.";
   return "Демо‑ответ: скоро подключим реальный AI‑бэкенд.";
 }
 
@@ -49,8 +49,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
     fabAndPanel();        // floating AI + following panel
   }
 
-  inlineAIHook();         // большой чат на ai.html (если есть)
-  mlWizardHook();         // мастер мотивационного письма (если есть)
+  inlineAIHook();         // для ai.html (большой чат)
+  mlWizardHook();         // мастер мотивационного письма (ai.html)
 });
 
 /* ---------- Header helpers ---------- */
@@ -72,7 +72,7 @@ function headerRightCluster(){
   const header=document.querySelector(".site-header"); if(!header) return;
   let right=document.querySelector(".header-right"); if(!right){ right=document.createElement("div"); right.className="header-right"; header.appendChild(right); }
 
-  // Points button
+  // Points
   let points=document.getElementById("pointsDisplay");
   if(!points){ points=document.createElement("button"); points.id="pointsDisplay"; points.className="points"; points.type="button"; points.textContent="⭐ 0"; right.appendChild(points); }
   updatePointsUI();
@@ -141,7 +141,7 @@ function headerRightCluster(){
   }
 }
 
-/* ---------- Theme switch (fixed) ---------- */
+/* ---------- Theme switch (iOS-like) ---------- */
 function themeSwitch(){
   const KEY="aiqynai_theme_choice";
   const mm=matchMedia("(prefers-color-scheme: dark)");
@@ -162,7 +162,7 @@ function themeSwitch(){
   const sys=()=> mm.matches?"dark":"light";
   const saved=get();
   if(saved==="light"||saved==="dark"){ sw.dataset.mode=saved; apply(saved); }
-  else { sw.dataset.mode=sys(); apply(sw.dataset.mode); } // сразу применяем
+  else { sw.dataset.mode=sys(); apply(sw.dataset.mode); }
 
   function toggle(){ const next=(sw.dataset.mode==="light")?"dark":"light"; sw.dataset.mode=next; set(next); apply(next); }
   sw.addEventListener("click",toggle);
@@ -271,13 +271,51 @@ function makeDraggableFab(el,onMove){
   el.addEventListener("pointerdown",down); addEventListener("pointermove",move); addEventListener("pointerup",up);
 }
 
-/* ---------- Inline AI for ai.html ---------- */
+/* ---------- Inline AI for ai.html (большой чат + chips + приветствие) ---------- */
 function inlineAIHook(){
-  const w=document.getElementById("chatWindow"); const i=document.getElementById("chatInput"); const s=document.getElementById("chatSend");
+  const w=document.getElementById("chatWindow");
+  const i=document.getElementById("chatInput");
+  const s=document.getElementById("chatSend");
+  const chips=document.getElementById("chatChips");
   if(!w||!i||!s) return;
-  const add=(text,who)=>{ const wrap=document.createElement("div"); wrap.className="msg "+(who==="me"?"me":"bot"); const b=document.createElement("div"); b.className="bubble"; b.textContent=text; wrap.appendChild(b); w.appendChild(wrap); w.scrollTop=w.scrollHeight; };
-  const send=()=>{ const t=(i.value||"").trim(); if(!t) return; add(t,"me"); i.value=""; const u=loadUser(); if(!u.firsts?.chat){ u.firsts.chat=true; saveUser(u); addPoints(20); } setTimeout(()=>add(demoAIReply(t),"bot"),300); };
-  s.addEventListener("click",send); i.addEventListener("keydown",e=>{ if(e.key==="Enter") send(); });
+
+  const add=(text,who)=>{
+    const wrap=document.createElement("div");
+    wrap.className="msg "+(who==="me"?"me":"bot");
+    const b=document.createElement("div");
+    b.className="bubble"+(who==="bot"?" bot":"");
+    b.textContent=text;
+    wrap.appendChild(b);
+    w.appendChild(wrap);
+    w.scrollTop=w.scrollHeight;
+  };
+
+  // Приветствие один раз
+  if(!w.dataset.greeted){
+    w.dataset.greeted="1";
+    const u=loadUser();
+    add(`Привет${u.name?`, ${u.name}`:""}! Я помогу с ЕНТ/IELTS/SAT и подбором вузов. Выбери подсказку ниже или задай вопрос.`, "bot");
+  }
+
+  // Chips → ввести текст и отправить
+  if(chips){
+    chips.querySelectorAll(".chip").forEach(ch=>{
+      ch.addEventListener("click", ()=>{
+        i.value = ch.textContent.trim();
+        i.focus();
+      });
+    });
+  }
+
+  const send=()=>{
+    const t=(i.value||"").trim(); if(!t) return;
+    add(t,"me"); i.value="";
+    const u=loadUser(); if(!u.firsts?.chat){ u.firsts.chat=true; saveUser(u); addPoints(20); }
+    setTimeout(()=>add(demoAIReply(t),"bot"),300);
+  };
+
+  s.addEventListener("click",send);
+  i.addEventListener("keydown",e=>{ if(e.key==="Enter") send(); });
 }
 
 /* ---------- Motivation Letter Wizard (ai.html) ---------- */
@@ -327,3 +365,4 @@ Sincerely,
 ${d.name}`;
   }
 }
+
