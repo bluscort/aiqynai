@@ -160,7 +160,9 @@ code,kbd{background:rgba(148,163,184,.15);padding:.1em .35em;border-radius:8px}
 .title{font-size:18px;letter-spacing:.2px}
 
 .nav{
-  display:flex; align-items:center; gap:6px; overflow-x:auto; padding:4px 0; position:relative; z-index:1;
+  flex:1;
+  display:flex; align-items:center; justify-content:center;
+  gap:6px; overflow-x:auto; padding:4px 0; position:relative; z-index:1;
 }
 .nav::-webkit-scrollbar{height:6px}
 .nav::-webkit-scrollbar-thumb{background:rgba(148,163,184,.35);border-radius:8px}
@@ -194,37 +196,29 @@ code,kbd{background:rgba(148,163,184,.15);padding:.1em .35em;border-radius:8px}
   font-weight:700;
 }
 
-/* Profile icon + dropdown */
-.user-menu{ position:relative; display:inline-block; }
+/* Right-side actions */
+.actions{ display:flex; align-items:center; gap:6px; }
 .profile-icon{
-  display:inline-block; padding:8px; border-radius:50%;
-  text-decoration:none; color:var(--ink); border:1px solid transparent;
-  transition: background .15s ease, border-color .15s ease;
-}
-.profile-icon.active{
-  color:#0b1726;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:34px; height:34px;
+  border-radius:50%; text-decoration:none;
+  border:1px solid rgba(255,255,255,.35);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.35)),
+    linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.35)),
     linear-gradient(135deg, var(--brand), var(--brand-2));
-  border-color: rgba(255,255,255,.45);
-  box-shadow: 0 6px 18px rgba(26,169,230,.25);
+  box-shadow:0 8px 22px rgba(26,169,230,.25);
+  color:#0b1726; font-size:18px;
+  transition:filter .15s ease, box-shadow .12s ease;
 }
-.profile-icon:hover{ background: linear-gradient(0deg, rgba(26,169,230,.08), rgba(26,169,230,0)); border-color: rgba(26,169,230,.20); }
-.profile-menu{
-  display:none; position:absolute; right:0; top:calc(100% + 6px);
-  background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.70));
-  border:1px solid var(--border); border-radius:var(--radius-sm);
-  box-shadow: var(--shadow-2);
-  backdrop-filter: blur(var(--glass-blur));
-  z-index:20; min-width:120px;
+.profile-icon:hover{
+  filter:brightness(1.03);
+  box-shadow:0 10px 28px rgba(26,169,230,.32);
 }
-.profile-menu a{ display:block; padding:8px 12px; white-space:nowrap; color:var(--ink); text-decoration:none; }
-.profile-menu a:hover{ background:rgba(26,169,230,.08); }
-.profile-menu a.active{ font-weight:700; }
-.user-menu:hover .profile-menu{ display:block; }
 
 /* Очки */
 .points{
+  display:inline-block;
+  text-decoration:none;
   font-weight:800; color:#0b1726;
   background:
     linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.35)),
