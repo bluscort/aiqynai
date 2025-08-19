@@ -69,7 +69,7 @@ function demoAIReply(text){
   if(/ielts/.test(t))        return "Демо: для IELTS уделяй 60% Writing/Speaking, 40% Reading/Listening. В релизе бот даст разбор.";
   if(/sat/.test(t))          return "Демо: SAT — тренируй Math по темам и читай EBRW каждый день. Скоро будут генераторы.";
   if(/универ|univ|вуз/.test(t)) return "Демо: выбери страну/язык/бюджет — бот подскажет список. В полной версии — персональный подбор.";
-  if(/письм|letter/.test(t)) return "Демо: открой 'Letters' и сгенерируй черновик; дальше подключим ИИ-редактор.";
+  if(/письм|letter/.test(t)) return "Демо: открой 'Мотивационное письмо' и сгенерируй черновик; дальше подключим ИИ-редактор.";
   return "Демо-ответ: скоро здесь будет настоящий AI-помощник с разбором и советами.";
 }
 
@@ -95,7 +95,7 @@ function makeHeaderBrandClickable(){
   brand.style.cursor = "pointer";
   brand.tabIndex = 0;
   brand.setAttribute("role", "link");
-  brand.setAttribute("aria-label", "Go to Home");
+  brand.setAttribute("aria-label", "На главную");
   const goHome = (e) => {
     if(e && e.target && e.target.closest && e.target.closest(".nav")) return;
     window.location.href = "index.html";
@@ -371,9 +371,14 @@ function injectThemeSwitch(){
   sw.append(sun, moon, thumb);
 
   // place near points if exists
-  const points = document.getElementById("pointsDisplay");
-  if(points && points.parentElement === header){
-    header.insertBefore(sw, points.nextSibling);
+  const actions = header.querySelector(".actions");
+  if(actions){
+    const points = actions.querySelector("#pointsDisplay");
+    if(points){
+      actions.insertBefore(sw, points.nextSibling);
+    }else{
+      actions.appendChild(sw);
+    }
   }else{
     header.appendChild(sw);
   }

@@ -77,14 +77,19 @@ body.theme-dark {
 /* --------- RESET & BASE --------- */
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{
-  font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  color:var(--ink);
+html{
+  min-height:100%;
   background:
     radial-gradient(1200px 600px at 10% -10%, rgba(26,169,230,.12), transparent 60%),
     radial-gradient(1200px 600px at 90% 110%, rgba(18,196,179,.10), transparent 60%),
     var(--bg);
+}
+body{
+  min-height:100%;
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--ink);
   line-height:1.65; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  background:transparent;
   /* reserve space for fixed footer */
   padding-bottom:120px;
 }
@@ -155,7 +160,9 @@ code,kbd{background:rgba(148,163,184,.15);padding:.1em .35em;border-radius:8px}
 .title{font-size:18px;letter-spacing:.2px}
 
 .nav{
-  display:flex; align-items:center; gap:6px; overflow-x:auto; padding:4px 0; position:relative; z-index:1;
+  flex:1;
+  display:flex; align-items:center; justify-content:center;
+  gap:6px; overflow-x:auto; padding:4px 0; position:relative; z-index:1;
 }
 .nav::-webkit-scrollbar{height:6px}
 .nav::-webkit-scrollbar-thumb{background:rgba(148,163,184,.35);border-radius:8px}
@@ -178,8 +185,40 @@ code,kbd{background:rgba(148,163,184,.15);padding:.1em .35em;border-radius:8px}
   box-shadow: 0 6px 18px rgba(26,169,230,.25);
 }
 
+/* Special highlighted link for AI */
+.nav a.ai-link{
+  color:#0b1726;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.35)),
+    linear-gradient(135deg, var(--brand), var(--brand-2));
+  border-color: rgba(255,255,255,.45);
+  box-shadow: 0 6px 18px rgba(26,169,230,.25);
+  font-weight:700;
+}
+
+/* Right-side actions */
+.actions{ display:flex; align-items:center; gap:6px; }
+.profile-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:34px; height:34px;
+  border-radius:50%; text-decoration:none;
+  border:1px solid rgba(255,255,255,.35);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.35)),
+    linear-gradient(135deg, var(--brand), var(--brand-2));
+  box-shadow:0 8px 22px rgba(26,169,230,.25);
+  color:#0b1726; font-size:18px;
+  transition:filter .15s ease, box-shadow .12s ease;
+}
+.profile-icon:hover{
+  filter:brightness(1.03);
+  box-shadow:0 10px 28px rgba(26,169,230,.32);
+}
+
 /* Очки */
 .points{
+  display:inline-block;
+  text-decoration:none;
   font-weight:800; color:#0b1726;
   background:
     linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.35)),
