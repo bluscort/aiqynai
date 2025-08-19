@@ -290,14 +290,12 @@ function inlineAIHook(){
     w.scrollTop=w.scrollHeight;
   };
 
-  // Приветствие один раз
   if(!w.dataset.greeted){
     w.dataset.greeted="1";
     const u=loadUser();
     add(`Привет${u.name?`, ${u.name}`:""}! Я помогу с ЕНТ/IELTS/SAT и подбором вузов. Выбери подсказку ниже или задай вопрос.`, "bot");
   }
 
-  // Chips → ввести текст и отправить
   if(chips){
     chips.querySelectorAll(".chip").forEach(ch=>{
       ch.addEventListener("click", ()=>{
@@ -365,4 +363,3 @@ Sincerely,
 ${d.name}`;
   }
 }
-
