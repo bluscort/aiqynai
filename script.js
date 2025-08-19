@@ -144,6 +144,7 @@ function injectAIFabAndPanel(){
       if(open){
         aiqynClearNotif();          // remove ping on open
         ensureAIPanel();            // lazy-create panel
+        positionAIPanel(fab);       // place panel near button
         setTimeout(()=>{
           const input = document.getElementById("aiqyn-fab-input");
           if(input) input.focus();
@@ -245,6 +246,36 @@ function aiPanelAddMsg(text, who="bot"){
   box.scrollTop = box.scrollHeight;
 }
 
+// Position panel near FAB
+function positionAIPanel(fab){
+  const panel = document.querySelector(".ai-panel");
+  if(!panel || !fab) return;
+  const rect = fab.getBoundingClientRect();
+  const pw = panel.offsetWidth;
+  const ph = panel.offsetHeight;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  let left = rect.left + rect.width/2 - pw/2;
+  left = Math.max(6, Math.min(vw - pw - 6, left));
+  let top = rect.top - ph - 10; // try above button
+  if(top < 6){
+    top = rect.bottom + 10; // place below
+    if(top + ph > vh - 6){
+      // place to side if no vertical space
+      if(rect.left + rect.width/2 < vw/2){
+        left = rect.right + 10;
+      }else{
+        left = rect.left - pw - 10;
+      }
+      left = Math.max(6, Math.min(vw - pw - 6, left));
+      top = rect.top + rect.height/2 - ph/2;
+      top = Math.max(6, Math.min(vh - ph - 6, top));
+    }
+  }
+  panel.style.left = left + "px";
+  panel.style.top  = top + "px";
+}
+
 // Draggable FAB
 function makeDraggableFab(el){
   let dragging = false, startX=0, startY=0, startLeft=0, startTop=0;
@@ -276,11 +307,13 @@ function makeDraggableFab(el){
     const ct = Math.max(6, Math.min(vh - sz.height - 6, nt));
     el.style.left = cl + "px";
     el.style.top  = ct + "px";
+    if(document.body.classList.contains("ai-open")) positionAIPanel(el);
   };
 
   const onPointerUp = (e)=>{
     dragging = false;
     try{ el.releasePointerCapture(e.pointerId); }catch(_){}
+    if(document.body.classList.contains("ai-open")) positionAIPanel(el);
   };
 
   el.style.position = "fixed";
@@ -290,6 +323,12 @@ function makeDraggableFab(el){
   window.addEventListener("pointermove", onPointerMove);
   window.addEventListener("pointerup", onPointerUp);
 }
+
+// Reposition panel on viewport changes
+window.addEventListener("resize", () => {
+  const fab = document.querySelector(".ai-fab");
+  if(fab && document.body.classList.contains("ai-open")) positionAIPanel(fab);
+});
 
 // FAB notification ping helpers
 function aiqynSetNotif(on=true){
