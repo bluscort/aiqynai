@@ -328,13 +328,7 @@ function aiqynClearNotif(){ aiqynSetNotif(false); }
     btn.style.borderRadius = "10px";
     btn.style.marginLeft = "8px";
 
-    // где разместить: рядом со счётчиком очков, если есть
-    const points = document.getElementById("pointsDisplay");
-    if(points && points.parentElement === header){
-      header.insertBefore(btn, points.nextSibling);
-    }else{
-      header.appendChild(btn);
-    }
+
 
     const setBtnUI = (mode)=>{
       btn.textContent = ICON[mode] + " " + mode.toUpperCase();
