@@ -1,36 +1,28 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>AiqynAI — Университеты</title><link rel="stylesheet" href="style.css"/></head>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Университеты — AiqynAI</title><link rel="stylesheet" href="style.css"/></head>
 <body>
-<header class="site-header">
-  <div class="brand"><span class="logo">✨</span><span class="title">AiqynAI</span></div>
-  <nav class="nav">
-    <a href="index.html">Главная</a>
-    <a href="tests.html">Тесты</a>
-    <a href="universities.html" class="active">Университеты</a>
-    <a href="blog.html">Блог</a>
-    <a href="assistant.html">Ассистент</a>
-    <a href="pricing.html">Цены</a>
-    <a href="contacts.html">Контакты</a>
-    <a href="faq.html">FAQ</a>
-    <a href="ai.html" class="ai-link">AI</a>
-  </nav>
-  <div class="actions">
-    <a id="pointsDisplay" class="points" href="rewards.html" title="Награды">⭐ 0</a>
-    <a href="profile.html" class="profile-icon" title="Профиль">👤</a>
-  </div>
-</header>
-<main class="container">
-  <h1>Университеты</h1>
-  <p>Позже: фильтры и подбор. Пока — демо-карточки.</p>
-  <div class="grid">
-    <div class="card"><h3>Nazarbayev University</h3><p>Astana, KZ — IELTS 6.5+ (пример), высокий GPA.</p></div>
-    <div class="card"><h3>Seoul National University</h3><p>Seoul, KR — высокий академ. уровень, язык.</p></div>
-    <div class="card"><h3>Charles University</h3><p>Prague, CZ — предметные экзамены / язык.</p></div>
-  </div>
-</main>
-<footer class="site-footer">© 2025 AiqynAI</footer>
-<script src="script.js"></script>
-</body></html>
+  <header class="site-header">
+    <div class="brand" tabindex="0" aria-label="Домой"><div class="logo">AI</div><div class="title">AiqynAI</div></div>
+    <nav class="nav">
+      <a href="index.html">Главная</a><a href="tests.html">Тесты</a><a href="universities.html" class="active">Университеты</a><a href="blog.html">Блог</a><a href="ai.html">AI</a><a href="faq.html">FAQ</a><a href="about.html">О нас</a><a href="contacts.html">Контакты</a><a href="pricing.html">Подписка</a><a href="terms.html">Условия</a><a href="privacy.html">Конфиденциальность</a>
+    </nav>
+    <div class="header-right">
+      <button id="pointsDisplay" class="points" type="button" title="Награды">⭐ 0</button>
+      <button id="profileButton" class="icon-btn" type="button" title="Профиль" aria-label="Профиль"><svg viewBox="0 0 24 24"><path d="M12 12c2.9 0 5-2.1 5-5s-2.1-5-5-5-5 2.1-5 5 2.1 5 5 5zm0 2c-4 0-8 2-8 6v2h16v-2c0-4-4-6-8-6z"/></svg></button>
+    </div>
+  </header>
 
+  <main class="container">
+    <h1>Университеты</h1>
+    <div class="grid">
+      <a class="card" href="#"><h3>КазНУ</h3><p>Требования и дедлайны.</p></a>
+      <a class="card" href="#"><h3>НУ (Nazarbayev University)</h3><p>IELTS/SAT, документы, сроки.</p></a>
+      <a class="card" href="#"><h3>KAIST</h3><p>STEM-направления, гранты.</p></a>
+    </div>
+  </main>
+
+  <footer class="site-footer"><span>© AiqynAI</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>
