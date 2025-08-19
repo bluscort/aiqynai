@@ -32,45 +32,56 @@
 <main class="container">
   <h1>AI‑ассистент</h1>
 
-  <!-- Большой встроенный чат -->
-  <div class="chat chat--xl glass">
-    <div class="chat-window" id="chatWindow"></div>
-    <div class="inputbar">
-      <input id="chatInput" type="text" placeholder="Спроси про ЕНТ/IELTS/SAT или вузы..."/>
-      <button class="btn" id="chatSend">Отправить</button>
-    </div>
-  </div>
+  <section class="split">
+    <!-- Левый столбец: чат -->
+    <div class="chat chat--xl glass">
+      <div class="chat-window" id="chatWindow"></div>
 
-  <!-- Мастер мотивационного письма -->
-  <section class="panel glass" style="margin-top:18px">
-    <h2>Мотивационное письмо (шаблон)</h2>
-    <form id="mlForm">
-      <div class="row">
-        <input id="mlName" type="text" placeholder="Ваше имя (на англ.)">
-        <input id="mlProgram" type="text" placeholder="Программа (e.g., Computer Science BSc)">
+      <!-- быстрые подсказки как во всплывающем окне -->
+      <div class="chips" id="chatChips">
+        <div class="chip">План к IELTS 7.0</div>
+        <div class="chip">Подбор вузов</div>
+        <div class="chip">Чек‑лист документов</div>
+        <div class="chip">Разбор ошибки ЕНТ</div>
       </div>
-      <div class="row">
-        <input id="mlUni" type="text" placeholder="Университет (e.g., Nazarbayev University)">
-        <input id="mlCountry" type="text" placeholder="Страна (e.g., Kazakhstan)">
+
+      <div class="inputbar" style="padding:12px">
+        <input id="chatInput" type="text" placeholder="Спроси про ЕНТ/IELTS/SAT или вузы..."/>
+        <button class="btn" id="chatSend">Отправить</button>
       </div>
-      <div class="row">
-        <input id="mlGoals" type="text" placeholder="Цели (e.g., research in AI, build EdTech)">
-      </div>
-      <div class="row">
-        <input id="mlAchievements" type="text" placeholder="Достижения/опыт (e.g., Olympiad, projects)">
-      </div>
-      <div class="row">
-        <input id="mlWhy" type="text" placeholder="Почему этот вуз/программа">
-      </div>
-      <div class="row">
-        <button type="button" class="btn" id="mlGenerate">Сгенерировать письмо</button>
-        <button type="button" class="btn ghost" id="mlCopy">Скопировать</button>
-      </div>
-    </form>
-    <div class="row">
-      <textarea id="mlOutput" rows="12" placeholder="Здесь появится черновик письма..."></textarea>
     </div>
-    <p class="hint">Это шаблон. Дальше можно будет переписать в вашем стиле, и AI поможет улучшить текст.</p>
+
+    <!-- Правый столбец: мотивационное письмо -->
+    <section class="panel glass">
+      <h2>Мотивационное письмо (шаблон)</h2>
+      <form id="mlForm">
+        <div class="row">
+          <input id="mlName" type="text" placeholder="Ваше имя (на англ.)">
+          <input id="mlProgram" type="text" placeholder="Программа (e.g., Computer Science BSc)">
+        </div>
+        <div class="row">
+          <input id="mlUni" type="text" placeholder="Университет (e.g., Nazarbayev University)">
+          <input id="mlCountry" type="text" placeholder="Страна (e.g., Kazakhstan)">
+        </div>
+        <div class="row">
+          <input id="mlGoals" type="text" placeholder="Цели (e.g., research in AI, build EdTech)">
+        </div>
+        <div class="row">
+          <input id="mlAchievements" type="text" placeholder="Достижения/опыт (e.g., Olympiad, projects)">
+        </div>
+        <div class="row">
+          <input id="mlWhy" type="text" placeholder="Почему этот вуз/программа">
+        </div>
+        <div class="row">
+          <button type="button" class="btn" id="mlGenerate">Сгенерировать письмо</button>
+          <button type="button" class="btn ghost" id="mlCopy">Скопировать</button>
+        </div>
+      </form>
+      <div class="row">
+        <textarea id="mlOutput" rows="12" placeholder="Здесь появится черновик письма..."></textarea>
+      </div>
+      <p class="hint">Это шаблон. Дальше можно переписать в вашем стиле — AI поможет улучшить текст.</p>
+    </section>
   </section>
 </main>
 
