@@ -1,10 +1,11 @@
 // ================================
 // AiqynAI — Global Client Script
-// (FAB with following chat panel)
+// (FAB with following chat panel) — FIXED
 // ================================
 
 const KEY = "aiqynai_user";
 
+/* ---------- Storage / Points ---------- */
 function loadUser(){
   try{
     return JSON.parse(localStorage.getItem(KEY)) || {
@@ -17,14 +18,19 @@ function loadUser(){
 function saveUser(u){ localStorage.setItem(KEY, JSON.stringify(u)); }
 function addPoints(n, reason=""){
   const u = loadUser(); u.points += n;
-  const earned=[]; [{p:50,id:"starter",label:"Starter"},{p:150,id:"explorer",label:"Explorer"},{p:300,id:"achiever",label:"Achiever"}]
+  const earned=[];
+  [{p:50,id:"starter",label:"Starter"},{p:150,id:"explorer",label:"Explorer"},{p:300,id:"achiever",label:"Achiever"}]
     .forEach(t=>{ if(u.points>=t.p && !u.badges.includes(t.id)){ u.badges.push(t.id); earned.push(t.label);} });
   saveUser(u); updatePointsUI(); return earned;
 }
-function updatePointsUI(){ const u=loadUser(); const el=document.getElementById("pointsDisplay"); if(el){ el.textContent=`⭐ ${u.points}`; el.title=`Badges: ${u.badges.join(", ")||"—"}`; } }
+function updatePointsUI(){
+  const u=loadUser(); const el=document.getElementById("pointsDisplay");
+  if(el){ el.textContent=`⭐ ${u.points}`; el.title=`Badges: ${u.badges.join(", ")||"—"}`; }
+}
 function setName(v){ const u=loadUser(); u.name=String(v||"").trim(); saveUser(u); }
 function setGoal(v){ const u=loadUser(); u.goal=String(v||"").trim(); saveUser(u); }
 
+/* ---------- Demo AI ---------- */
 function demoAIReply(text){
   const t=(text||"").toLowerCase();
   if(/ент|en[nt]/.test(t))   return "Демо: начни с плана по предметам ЕНТ и решай таймированно. Скоро подключим ИИ.";
@@ -32,19 +38,20 @@ function demoAIReply(text){
   if(/sat/.test(t))          return "Демо: SAT — тренируй Math и читай EBRW ежедневно.";
   if(/универ|univ|вуз/.test(t)) return "Демо: выбери страну/язык/бюджет — бот подскажет список.";
   if(/письм|letter/.test(t)) return "Демо: открой 'Letters' и сгенерируй черновик.";
-  return "Демо-ответ: скоро здесь будет настоящий AI-помощник с разбором и советами.";
+  return "Демо-ответ: скоро здесь будет настоящий AI‑помощник с разбором и советами.";
 }
 
+/* ---------- Init ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   updatePointsUI();
   makeHeaderBrandClickable();
   ensureFooterHomeLink();
-  injectHeaderRight();        // points + profile
+  injectHeaderRight();        // points + profile (modals)
   injectThemeSwitch();        // iOS-like switch (Light/Dark)
-  injectAIFabAndPanel();      // FAB + following panel
+  setupFabAndPanel();         // FAB + following panel (fixed)
 });
 
-// ===== Header basics =====
+/* ---------- Header helpers ---------- */
 function makeHeaderBrandClickable(){
   const brand=document.querySelector(".site-header .brand");
   if(!brand || brand.dataset.homeBound==="1") return;
@@ -60,12 +67,12 @@ function ensureFooterHomeLink(){
   footer.prepend(a, document.createTextNode(" "));
 }
 
-// ===== Right cluster: points (Rewards modal) + Profile modal =====
+/* ---------- Right cluster: Rewards + Profile ---------- */
 function injectHeaderRight(){
   const header=document.querySelector(".site-header"); if(!header) return;
   let right=document.querySelector(".header-right"); if(!right){ right=document.createElement("div"); right.className="header-right"; header.appendChild(right); }
 
-  // Points
+  // Points button
   let points=document.getElementById("pointsDisplay");
   if(!points){ points=document.createElement("button"); points.id="pointsDisplay"; points.className="points"; points.type="button"; right.appendChild(points); }
   updatePointsUI();
@@ -127,7 +134,7 @@ function injectHeaderRight(){
   }
 }
 
-// ===== Theme switch (Light/Dark, default System) =====
+/* ---------- Theme switch ---------- */
 function injectThemeSwitch(){
   const KEY="aiqynai_theme_choice";
   const media=matchMedia("(prefers-color-scheme: dark)");
@@ -154,10 +161,10 @@ function injectThemeSwitch(){
   media.addEventListener?.("change",()=>{ if(!getSaved()) sw.dataset.mode=sys(); });
 }
 
-// ===== FAB + FOLLOWING AI PANEL =====
+/* ---------- FAB + FOLLOWING PANEL (fixed) ---------- */
 let aiPanelEl=null, aiFabEl=null;
 
-function injectAIFabAndPanel(){
+function setupFabAndPanel(){
   const body=document.body;
 
   // FAB
@@ -166,62 +173,68 @@ function injectAIFabAndPanel(){
     aiFabEl.className="ai-fab"; aiFabEl.type="button"; aiFabEl.innerHTML="<span>AI</span>";
     aiFabEl.style.display="grid"; aiFabEl.style.position="fixed"; aiFabEl.style.right="20px"; aiFabEl.style.bottom="20px";
     body.appendChild(aiFabEl); body.classList.add("ai-ready");
+
     makeDraggableFab(aiFabEl, ()=>{ if(body.classList.contains("ai-open")) positionPanelNearFab(); });
+
     aiFabEl.addEventListener("click", ()=>{
       const open=body.classList.toggle("ai-open");
-      if(open){ aiqynClearNotif(); ensureAIPanel(); positionPanelNearFab(true); setTimeout(()=>document.getElementById("aiqyn-fab-input")?.focus(),0); }
+      if(open){
+        aiqynClearNotif();
+        ensureAIPanel();            // <— создаём панель (не переопределяется!)
+        positionPanelNearFab(true);
+        setTimeout(()=>document.getElementById("aiqyn-fab-input")?.focus(),0);
+      }
     });
+
     addEventListener("resize", ()=>{ if(document.body.classList.contains("ai-open")) positionPanelNearFab(); });
     addEventListener("scroll", ()=>{ if(document.body.classList.contains("ai-open")) positionPanelNearFab(); }, {passive:true});
   }
+}
 
-  // Panel (lazy)
-  function ensureAIPanel(){
-    if(aiPanelEl) return;
-    aiPanelEl=document.createElement("section"); aiPanelEl.className="ai-panel";
-    aiPanelEl.innerHTML=`
-      <header>
-        <div class="title">AIqyn Assistant</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="dot" title="online"></span>
-          <button type="button" id="aiqyn-fab-close" class="btn ghost" style="padding:6px 10px;border-radius:10px">×</button>
-        </div>
-      </header>
-      <div class="body">
-        <div id="aiqyn-fab-scroll" class="scroll" aria-live="polite"></div>
-        <div class="chips" id="aiqyn-fab-chips">
-          <div class="chip">План к IELTS 7.0</div>
-          <div class="chip">Подбор вузов</div>
-          <div class="chip">Чек-лист документов</div>
-          <div class="chip">Разбор ошибки ЕНТ</div>
-        </div>
-        <div class="inputbar">
-          <input id="aiqyn-fab-input" type="text" placeholder="Спроси про ЕНТ/IELTS/SAT или вузы..." />
-          <button class="btn" id="aiqyn-fab-send">Отправить</button>
-        </div>
-      </div>`;
-    document.body.appendChild(aiPanelEl);
+function ensureAIPanel(){
+  if(aiPanelEl) return aiPanelEl;
+  aiPanelEl=document.createElement("section"); aiPanelEl.className="ai-panel";
+  aiPanelEl.innerHTML=`
+    <header>
+      <div class="title">AIqyn Assistant</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="dot" title="online"></span>
+        <button type="button" id="aiqyn-fab-close" class="btn ghost" style="padding:6px 10px;border-radius:10px">×</button>
+      </div>
+    </header>
+    <div class="body">
+      <div id="aiqyn-fab-scroll" class="scroll" aria-live="polite"></div>
+      <div class="chips" id="aiqyn-fab-chips">
+        <div class="chip">План к IELTS 7.0</div>
+        <div class="chip">Подбор вузов</div>
+        <div class="chip">Чек-лист документов</div>
+        <div class="chip">Разбор ошибки ЕНТ</div>
+      </div>
+      <div class="inputbar">
+        <input id="aiqyn-fab-input" type="text" placeholder="Спроси про ЕНТ/IELTS/SAT или вузы..." />
+        <button class="btn" id="aiqyn-fab-send">Отправить</button>
+      </div>
+    </div>`;
+  document.body.appendChild(aiPanelEl);
 
-    aiPanelAddMsg(`Привет${loadUser().name?`, ${loadUser().name}`:""}! Это мини‑чат AI. Задай вопрос или выбери подсказку ниже.`,"bot");
+  aiPanelAddMsg(`Привет${loadUser().name?`, ${loadUser().name}`:""}! Это мини‑чат AI. Задай вопрос или выбери подсказку ниже.`,"bot");
 
-    aiPanelEl.querySelector("#aiqyn-fab-close").addEventListener("click", ()=>{
-      document.body.classList.remove("ai-open"); aiqynClearNotif();
-    });
-    aiPanelEl.querySelectorAll("#aiqyn-fab-chips .chip").forEach(ch=>{
-      ch.addEventListener("click", ()=>{ const i=document.getElementById("aiqyn-fab-input"); i.value=ch.textContent.trim(); i.focus(); });
-    });
-    const send=()=>{
-      const i=document.getElementById("aiqyn-fab-input"); const text=(i.value||"").trim(); if(!text) return;
-      aiPanelAddMsg(text,"me"); i.value="";
-      const u=loadUser(); if(!u.firsts?.chat){ u.firsts.chat=true; saveUser(u); addPoints(20,"first_chat"); }
-      setTimeout(()=>{ aiPanelAddMsg(demoAIReply(text),"bot"); if(!document.body.classList.contains("ai-open")) aiqynSetNotif(true); },300);
-    };
-    aiPanelEl.querySelector("#aiqyn-fab-send").addEventListener("click",send);
-    aiPanelEl.querySelector("#aiqyn-fab-input").addEventListener("keydown",(e)=>{ if(e.key==="Enter") send(); });
-  }
+  aiPanelEl.querySelector("#aiqyn-fab-close").addEventListener("click", ()=>{
+    document.body.classList.remove("ai-open"); aiqynClearNotif();
+  });
+  aiPanelEl.querySelectorAll("#aiqyn-fab-chips .chip").forEach(ch=>{
+    ch.addEventListener("click", ()=>{ const i=document.getElementById("aiqyn-fab-input"); i.value=ch.textContent.trim(); i.focus(); });
+  });
+  const send=()=>{
+    const i=document.getElementById("aiqyn-fab-input"); const text=(i.value||"").trim(); if(!text) return;
+    aiPanelAddMsg(text,"me"); i.value="";
+    const u=loadUser(); if(!u.firsts?.chat){ u.firsts.chat=true; saveUser(u); addPoints(20,"first_chat"); }
+    setTimeout(()=>{ aiPanelAddMsg(demoAIReply(text),"bot"); if(!document.body.classList.contains("ai-open")) aiqynSetNotif(true); },300);
+  };
+  aiPanelEl.querySelector("#aiqyn-fab-send").addEventListener("click",send);
+  aiPanelEl.querySelector("#aiqyn-fab-input").addEventListener("keydown",(e)=>{ if(e.key==="Enter") send(); });
 
-  // helpers in closure
-  function ensureAIPanel(){ return null; } // placeholder to keep scope happy
+  return aiPanelEl;
 }
 
 function aiPanelAddMsg(text, who="bot"){
@@ -231,29 +244,31 @@ function aiPanelAddMsg(text, who="bot"){
   wrap.appendChild(bubble); box.appendChild(wrap); box.scrollTop=box.scrollHeight;
 }
 
-// Position panel next to FAB
 function positionPanelNearFab(animate=false){
   const panel=document.querySelector(".ai-panel"); const fab=document.querySelector(".ai-fab"); if(!panel || !fab) return;
   const fr=fab.getBoundingClientRect();
   const pw=panel.offsetWidth||380, ph=panel.offsetHeight||480;
-  const vw=window.innerWidth, vh=window.innerHeight;
+  const vw=innerWidth, vh=innerHeight;
 
-  // Prefer panel above and to the left of FAB (like popover). Adjust to stay on screen.
-  let top = fr.top - ph - 10;       // above FAB
-  let left = fr.left - pw + fr.width; // align right edges
+  // по умолчанию — над FAB, выравнивание справа
+  let top = fr.top - ph - 10;
+  let left = fr.left - pw + fr.width;
 
-  if(top < 8) top = fr.bottom + 10;           // if not enough space above, put below
-  if(left + pw > vw - 8) left = vw - pw - 8;  // clamp right
-  if(left < 8) left = 8;                      // clamp left
-  if(top + ph > vh - 8) top = Math.max(8, vh - ph - 8); // clamp bottom
+  if(top < 8) top = fr.bottom + 10;           // если места сверху нет — открываем снизу
+  if(left + pw > vw - 8) left = vw - pw - 8;  // правый край
+  if(left < 8) left = 8;                      // левый край
+  if(top + ph > vh - 8) top = Math.max(8, vh - ph - 8); // низ
 
   panel.style.top = `${Math.round(top)}px`;
   panel.style.left = `${Math.round(left)}px`;
 
-  if(animate){ panel.style.transform="translateY(8px) scale(.985)"; requestAnimationFrame(()=>{ panel.style.transform="translateY(0) scale(1)"; }); }
+  if(animate){
+    panel.style.transform="translateY(8px) scale(.985)";
+    requestAnimationFrame(()=>{ panel.style.transform="translateY(0) scale(1)"; });
+  }
 }
 
-// Draggable FAB with callback on move
+/* ---------- Draggable FAB ---------- */
 function makeDraggableFab(el, onMove){
   let dragging=false,sx=0,sy=0,sl=0,st=0;
   const down=(e)=>{ dragging=true; try{el.setPointerCapture(e.pointerId);}catch{} const r=el.getBoundingClientRect();
@@ -263,17 +278,17 @@ function makeDraggableFab(el, onMove){
     const vw=innerWidth,vh=innerHeight, sz=el.getBoundingClientRect();
     el.style.left=Math.max(6,Math.min(vw-sz.width-6,nl))+"px";
     el.style.top =Math.max(6,Math.min(vh-sz.height-6,nt))+"px";
-    if(onMove) onMove();
+    onMove && onMove();
   };
   const up=(e)=>{ dragging=false; try{el.releasePointerCapture(e.pointerId);}catch{} };
   el.addEventListener("pointerdown",down); addEventListener("pointermove",move); addEventListener("pointerup",up);
 }
 
-// FAB ping helpers
+/* ---------- FAB ping helpers ---------- */
 function aiqynSetNotif(on=true){ document.querySelector(".ai-fab")?.classList.toggle("has-notif", !!on); }
 function aiqynClearNotif(){ aiqynSetNotif(false); }
 
-// ===== Inline chat on ai.html (kept) =====
+/* ---------- Inline chat for ai.html (оставляем) ---------- */
 (function(){
   const w=document.getElementById("chatWindow");
   const i=document.getElementById("chatInput");
