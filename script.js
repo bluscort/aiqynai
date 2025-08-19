@@ -32,6 +32,7 @@ function demoAIReply(text){
   if(/ielts/.test(t))        return "Демо: IELTS — фокус 60% Writing/Speaking, 40% Reading/Listening.";
   if(/sat/.test(t))          return "Демо: SAT — ежедневные Math и чтение EBRW.";
   if(/универ|вуз|univ/.test(t)) return "Демо: укажи страну/язык/бюджет — подберу варианты.";
+  if(/мотивацион|cover|motivation/.test(t)) return "Открой мастер «Мотивационное письмо» ниже на странице AI.";
   return "Демо‑ответ: скоро подключим реальный AI‑бэкенд.";
 }
 
@@ -42,8 +43,14 @@ document.addEventListener("DOMContentLoaded", ()=>{
   ensureFooterHomeLink();
   headerRightCluster();   // points + profile + rewards (modals)
   themeSwitch();          // iOS-like, fixed
-  fabAndPanel();          // floating AI + following panel
-  inlineAIHook();         // for ai.html big chat
+
+  // Если это страница AI — не вставляем плавающий мини-чат
+  if(!document.body.classList.contains('page-ai')){
+    fabAndPanel();        // floating AI + following panel
+  }
+
+  inlineAIHook();         // большой чат на ai.html (если есть)
+  mlWizardHook();         // мастер мотивационного письма (если есть)
 });
 
 /* ---------- Header helpers ---------- */
@@ -77,13 +84,13 @@ function headerRightCluster(){
     right.appendChild(btn);
   }
 
-  // Backdrop (one for all modals)
+  // Backdrop
   if(!document.querySelector(".modal-backdrop")){
     const back=document.createElement("div"); back.className="modal-backdrop"; document.body.appendChild(back);
   }
   const backdrop=document.querySelector(".modal-backdrop");
 
-  // Rewards modal (same style as profile)
+  // Rewards modal
   if(!document.getElementById("rewardsModal")){
     const m=document.createElement("section"); m.className="modal"; m.id="rewardsModal";
     m.innerHTML=`<header><h3>Награды</h3><button class="close" data-close="rewardsModal">Закрыть</button></header><div class="rewards-grid" id="rewardsGrid"></div>`;
@@ -107,21 +114,15 @@ function headerRightCluster(){
   function openModal(id){ document.getElementById(id).classList.add("open"); backdrop.classList.add("open"); }
   function closeModal(){ document.querySelectorAll(".modal.open").forEach(m=>m.classList.remove("open")); backdrop.classList.remove("open"); }
 
-  // Rewards open
-  document.getElementById("pointsDisplay").addEventListener("click", ()=>{
-    renderRewards(); openModal("rewardsModal");
-  });
-  // Profile open
+  document.getElementById("pointsDisplay").addEventListener("click", ()=>{ renderRewards(); openModal("rewardsModal"); });
   document.getElementById("profileButton").addEventListener("click", ()=>{
     const u=loadUser();
     document.getElementById("profName").value=u.name||"";
     document.getElementById("profGoal").value=u.goal||"";
     openModal("profileModal");
   });
-
   backdrop.addEventListener("click", closeModal);
   document.addEventListener("click",(e)=>{ const c=e.target.closest(".close"); if(c){ closeModal(); }});
-
   document.getElementById("profSave").addEventListener("click", ()=>{
     const u=loadUser(); u.name=document.getElementById("profName").value.trim(); u.goal=document.getElementById("profGoal").value.trim();
     saveUser(u); addPoints(10); closeModal();
@@ -152,12 +153,16 @@ function themeSwitch(){
 
   const get=()=>localStorage.getItem(KEY);
   const set=m=>m?localStorage.setItem(KEY,m):localStorage.removeItem(KEY);
-  const apply=m=>{ document.body.classList.remove("theme-light","theme-dark"); if(m==="light") document.body.classList.add("theme-light"); if(m==="dark") document.body.classList.add("theme-dark"); };
+  const apply=m=>{
+    document.body.classList.remove("theme-light","theme-dark");
+    if(m==="light") document.body.classList.add("theme-light");
+    if(m==="dark")  document.body.classList.add("theme-dark");
+  };
 
   const sys=()=> mm.matches?"dark":"light";
-  let saved=get();
+  const saved=get();
   if(saved==="light"||saved==="dark"){ sw.dataset.mode=saved; apply(saved); }
-  else { sw.dataset.mode=sys(); apply(sw.dataset.mode); } // <-- критично: сразу применяем
+  else { sw.dataset.mode=sys(); apply(sw.dataset.mode); } // сразу применяем
 
   function toggle(){ const next=(sw.dataset.mode==="light")?"dark":"light"; sw.dataset.mode=next; set(next); apply(next); }
   sw.addEventListener("click",toggle);
@@ -166,10 +171,10 @@ function themeSwitch(){
   mm.addEventListener?.("change",()=>{ if(!get()){ sw.dataset.mode=sys(); apply(sw.dataset.mode); } });
 }
 
-/* ---------- FAB + following AI panel ---------- */
+/* ---------- FAB + following AI panel (skip on ai.html) ---------- */
 let aiPanelEl=null, aiFabEl=null;
-
 function fabAndPanel(){
+  if(document.body.classList.contains('page-ai')) return; // не мешаем большой версии на AI‑странице
   const body=document.body;
 
   if(!document.querySelector(".ai-fab")){
@@ -192,7 +197,6 @@ function fabAndPanel(){
     addEventListener("scroll", ()=>{ if(document.body.classList.contains("ai-open")) positionPanelNearFab(); }, {passive:true});
   }
 }
-
 function ensureAIPanel(){
   if(aiPanelEl) return aiPanelEl;
   aiPanelEl=document.createElement("section"); aiPanelEl.className="ai-panel";
@@ -243,7 +247,6 @@ function ensureAIPanel(){
 
   return aiPanelEl;
 }
-
 function positionPanelNearFab(animate=false){
   const panel=document.querySelector(".ai-panel"); const fab=document.querySelector(".ai-fab"); if(!panel||!fab) return;
   const fr=fab.getBoundingClientRect(); const pw=panel.offsetWidth||380, ph=panel.offsetHeight||480; const vw=innerWidth, vh=innerHeight;
@@ -275,4 +278,52 @@ function inlineAIHook(){
   const add=(text,who)=>{ const wrap=document.createElement("div"); wrap.className="msg "+(who==="me"?"me":"bot"); const b=document.createElement("div"); b.className="bubble"; b.textContent=text; wrap.appendChild(b); w.appendChild(wrap); w.scrollTop=w.scrollHeight; };
   const send=()=>{ const t=(i.value||"").trim(); if(!t) return; add(t,"me"); i.value=""; const u=loadUser(); if(!u.firsts?.chat){ u.firsts.chat=true; saveUser(u); addPoints(20); } setTimeout(()=>add(demoAIReply(t),"bot"),300); };
   s.addEventListener("click",send); i.addEventListener("keydown",e=>{ if(e.key==="Enter") send(); });
+}
+
+/* ---------- Motivation Letter Wizard (ai.html) ---------- */
+function mlWizardHook(){
+  const form=document.getElementById('mlForm');
+  if(!form) return;
+
+  const out=document.getElementById('mlOutput');
+  const btn=form.querySelector('#mlGenerate');
+  const btnCopy=document.getElementById('mlCopy');
+
+  btn.addEventListener('click', ()=>{
+    const v = (id)=> (form.querySelector('#'+id)?.value||'').trim();
+    const data={
+      name: v('mlName')||'Имя Фамилия',
+      program: v('mlProgram')||'программа',
+      uni: v('mlUni')||'университет',
+      country: v('mlCountry')||'страна',
+      goals: v('mlGoals')||'краткие цели',
+      achievements: v('mlAchievements')||'достижения/опыт',
+      why: v('mlWhy')||'почему вам подходит программа/университет'
+    };
+    const letter = makeMotivationLetter(data);
+    out.value = letter;
+    addPoints(10);
+  });
+
+  btnCopy.addEventListener('click', ()=>{
+    out.select(); document.execCommand('copy');
+    alert('Скопировано в буфер обмена!');
+  });
+
+  function makeMotivationLetter(d){
+    return `Dear Admissions Committee,
+
+My name is ${d.name}. I am applying to the ${d.program} program at ${d.uni} (${d.country}). 
+Over the last years I have focused on ${d.achievements}.
+
+I am particularly motivated to join ${d.uni} because ${d.why}. 
+Your curriculum and learning environment align with my goals: ${d.goals}.
+
+I believe my background and motivation will allow me to contribute to the ${d.program} cohort and the wider university community.
+
+Thank you for considering my application.
+
+Sincerely,
+${d.name}`;
+  }
 }
