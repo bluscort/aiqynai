@@ -1,60 +1,26 @@
 <!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Подписка — AiqynAI</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Подписка — AiqynAI</title><link rel="stylesheet" href="style.css"/></head>
 <body>
-  <header class="site-header">
-    <div class="brand" tabindex="0" aria-label="Домой"><div class="logo">AI</div><div class="title">AiqynAI</div></div>
-    <nav class="nav">
-      <a href="index.html">Главная</a>
-      <a href="tests.html">Тесты</a>
-      <a href="universities.html">Университеты</a>
-      <a href="blog.html">Блог</a>
-      <a href="ai.html">AI</a>
-      <a href="faq.html">FAQ</a>
-      <a href="about.html">О нас</a>
-      <a href="contacts.html">Контакты</a>
-      <a href="pricing.html" class="active">Подписка</a>
-      <a href="terms.html">Условия</a>
-      <a href="privacy.html">Конфиденциальность</a>
-    </nav>
-    <div class="header-right">
-      <button id="pointsDisplay" class="points" type="button" title="Награды">⭐ 0</button>
-      <button id="profileButton" class="icon-btn" type="button" title="Профиль" aria-label="Профиль">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.9 0 5-2.1 5-5s-2.1-5-5-5-5 2.1-5 5 2.1 5 5 5zm0 2c-4 0-8 2-8 6v2h16v-2c0-4-4-6-8-6z"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <main class="container">
-    <h1>Тарифы</h1>
-    <div class="grid">
-      <div class="card">
-        <h3>Free</h3>
-        <p>Базовые тесты, блог, мини‑чат AI (демо), система наград.</p>
-        <p><strong>0 ₸</strong> / всегда</p>
-        <button class="btn" onclick="alert('Активирован Free (демо)')">Выбрать</button>
-      </div>
-      <div class="card">
-        <h3>Plus</h3>
-        <p>Расширенные тесты, сохранение прогресса, письма‑черновики, рекомендации вузов.</p>
-        <p><strong>~2 990 ₸</strong> / мес (пример)</p>
-        <button class="btn" onclick="addPoints(10,'choose_plus');alert('Plus оформим в проде')">Выбрать</button>
-      </div>
-      <div class="card">
-        <h3>Pro</h3>
-        <p>Генерация тестов AI, глубокая аналитика, подбор документов, экспорт портфолио.</p>
-        <p><strong>~5 990 ₸</strong> / мес (пример)</p>
-        <button class="btn" onclick="addPoints(15,'choose_pro');alert('Pro оформим в проде')">Выбрать</button>
-      </div>
-    </div>
-    <p class="hint">Цены ориентировочные. Финальные условия объявим при запуске.</p>
-  </main>
-
-  <footer class="site-footer"><span>© AiqynAI</span></footer>
-  <script src="script.js"></script>
-</body>
-</html>
+<header class="site-header">
+  <div class="brand" tabindex="0"><div class="logo">AI</div><div class="title">AiqynAI</div></div>
+  <nav class="nav">
+    <a href="index.html">Главная</a><a href="tests.html">Тесты</a><a href="universities.html">Университеты</a>
+    <a href="blog.html">Блог</a><a href="ai.html">AI</a><a href="faq.html">FAQ</a><a href="about.html">О нас</a>
+    <a href="contacts.html">Контакты</a><a href="pricing.html" class="active">Подписка</a><a href="terms.html">Условия</a><a href="privacy.html">Конфиденциальность</a>
+  </nav>
+  <div class="header-right"><button id="pointsDisplay" class="points">⭐ 0</button><button id="profileButton" class="icon-btn" title="Профиль">
+    <svg viewBox="0 0 24 24"><path d="M12 12c2.9 0 5-2.1 5-5s-2.1-5-5-5-5 2.1-5 5 2.1 5 5 5zm0 2c-4 0-8 2-8 6v2h16v-2c0-4-4-6-8-6z"/></svg></button></div>
+</header>
+<main class="container">
+  <h1>Тарифы</h1>
+  <div class="grid">
+    <div class="card"><h3>Free</h3><p>Базовые тесты, блог, мини‑чат AI, награды.</p><p><strong>0 ₸</strong> / всегда</p><button class="btn" onclick="alert('Free активирован (демо)')">Выбрать</button></div>
+    <div class="card"><h3>Plus</h3><p>Расширенные тесты, прогресс, письма‑черновики.</p><p><strong>~2 990 ₸</strong> / мес</p><button class="btn" onclick="addPoints(10);alert('Plus оформим при запуске')">Выбрать</button></div>
+    <div class="card"><h3>Pro</h3><p>Генерация тестов AI, аналитика, подбор документов.</p><p><strong>~5 990 ₸</strong> / мес</p><button class="btn" onclick="addPoints(15);alert('Pro оформим при запуске')">Выбрать</button></div>
+  </div>
+</main>
+<footer class="site-footer"><span>© AiqynAI</span></footer>
+<script src="script.js"></script>
+</body></html>
