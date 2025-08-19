@@ -371,12 +371,14 @@ function injectThemeSwitch(){
   sw.append(sun, moon, thumb);
 
   // place near points if exists
-  const points = document.getElementById("pointsDisplay");
-  const profile = header.querySelector(".user-menu");
-  if(profile){
-    header.insertBefore(sw, profile.nextSibling);
-  }else if(points && points.parentElement === header){
-    header.insertBefore(sw, points.nextSibling);
+  const actions = header.querySelector(".actions");
+  if(actions){
+    const points = actions.querySelector("#pointsDisplay");
+    if(points){
+      actions.insertBefore(sw, points.nextSibling);
+    }else{
+      actions.appendChild(sw);
+    }
   }else{
     header.appendChild(sw);
   }
