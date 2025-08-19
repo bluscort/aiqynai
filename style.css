@@ -85,6 +85,8 @@ body{
     radial-gradient(1200px 600px at 90% 110%, rgba(18,196,179,.10), transparent 60%),
     var(--bg);
   line-height:1.65; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  /* reserve space for fixed footer */
+  padding-bottom:120px;
 }
 
 /* --------- TYPOGRAPHY --------- */
@@ -99,9 +101,11 @@ code,kbd{background:rgba(148,163,184,.15);padding:.1em .35em;border-radius:8px}
 /* --------- LAYOUT --------- */
 .container{max-width:1140px;margin:28px auto;padding:0 18px}
 .site-footer{
-  position:relative;text-align:center;color:var(--muted);font-size:14px;
+  position:fixed; left:0; bottom:0; width:100%;
+  text-align:center; color:var(--muted); font-size:14px;
   padding:36px 18px; overflow:hidden;
   backdrop-filter: blur(var(--glass-blur));
+  z-index:40;
 }
 .site-footer a{font-weight:700}
 
@@ -332,7 +336,7 @@ body.ai-ready .ai-fab{ display:grid; }
 
 /* Мини-панель AI (mini chat) */
 .ai-panel{
-  position:fixed; right:20px; bottom:90px; z-index:60;
+  position:fixed; z-index:60;
   width:380px; max-width:calc(100vw - 32px); height:480px;
   border-radius:18px; overflow:hidden;
   display:block; opacity:0; transform: translateY(8px) scale(.985);
