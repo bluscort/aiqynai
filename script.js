@@ -1,5 +1,6 @@
 // =======================================
 // AiqynAI — Stable global client script
+// + Mobile burger menu
 // =======================================
 const KEY = "aiqynai_user";
 
@@ -43,8 +44,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
   ensureFooterHomeLink();
   headerRightCluster();   // points + profile + rewards (modals)
   themeSwitch();          // iOS-like, fixed
+  initMobileMenu();       // БУРГЕР-МЕНЮ
 
-  // Если это страница AI — не вставляем плавающий мини-чат
+  // Если это страница AI — не вставляем плавающий мини‑чат
   if(!document.body.classList.contains('page-ai')){
     fabAndPanel();        // floating AI + following panel
   }
@@ -171,6 +173,68 @@ function themeSwitch(){
   mm.addEventListener?.("change",()=>{ if(!get()){ sw.dataset.mode=sys(); apply(sw.dataset.mode); } });
 }
 
+/* ---------- MOBILE BURGER MENU ---------- */
+function initMobileMenu(){
+  const header=document.querySelector(".site-header");
+  const nav=document.querySelector(".site-header .nav");
+  if(!header||!nav) return;
+
+  // Добавляем кнопку-бургер (справа перед header-right)
+  if(!document.getElementById("burgerButton")){
+    const burger=document.createElement("button");
+    burger.id="burgerButton"; burger.className="burger"; burger.type="button"; burger.setAttribute("aria-label","Меню");
+    burger.innerHTML = `<svg viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>`;
+    header.insertBefore(burger, header.querySelector(".header-right"));
+  }
+
+  // Бекдроп и выдвижной ящик (один на весь сайт)
+  if(!document.querySelector(".mobile-backdrop")){
+    const bd=document.createElement("div"); bd.className="mobile-backdrop"; document.body.appendChild(bd);
+  }
+  if(!document.querySelector(".mobile-drawer")){
+    const dr=document.createElement("aside"); dr.className="mobile-drawer";
+    const brand = document.querySelector(".site-header .brand")?.cloneNode(true);
+    // Клонируем существующие ссылки
+    const links = document.createElement("nav");
+    links.innerHTML = nav.innerHTML;
+
+    dr.innerHTML = `
+      <header>
+        <div style="display:flex;align-items:center;gap:8px">${brand?brand.outerHTML:'<strong>Menu</strong>'}</div>
+        <button class="close" type="button">Закрыть</button>
+      </header>
+    `;
+    dr.appendChild(links);
+    document.body.appendChild(dr);
+  }
+
+  const burgerBtn=document.getElementById("burgerButton");
+  const backdrop=document.querySelector(".mobile-backdrop");
+  const drawer=document.querySelector(".mobile-drawer");
+
+  const open=()=>{
+    document.body.classList.add("mobile-open");
+    // актуализируем активную ссылку в выдвижном меню
+    const curr=location.pathname.split("/").pop()||"index.html";
+    drawer.querySelectorAll("a").forEach(a=>{
+      const href=a.getAttribute("href")||"";
+      a.classList.toggle("active", href===curr);
+    });
+  };
+  const close=()=>document.body.classList.remove("mobile-open");
+
+  burgerBtn.addEventListener("click", open);
+  backdrop.addEventListener("click", close);
+  drawer.querySelector(".close").addEventListener("click", close);
+  drawer.addEventListener("click",(e)=>{
+    const a=e.target.closest("a"); if(a){ close(); }
+  });
+  document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") close(); });
+
+  // При ресайзе больше 900px — гарантированно закрыть
+  addEventListener("resize", ()=>{ if(innerWidth>900) close(); });
+}
+
 /* ---------- FAB + following AI panel (skip on ai.html) ---------- */
 let aiPanelEl=null, aiFabEl=null;
 function fabAndPanel(){
@@ -271,7 +335,7 @@ function makeDraggableFab(el,onMove){
   el.addEventListener("pointerdown",down); addEventListener("pointermove",move); addEventListener("pointerup",up);
 }
 
-/* ---------- Inline AI for ai.html (большой чат + chips + приветствие) ---------- */
+/* ---------- Inline AI for ai.html ---------- */
 function inlineAIHook(){
   const w=document.getElementById("chatWindow");
   const i=document.getElementById("chatInput");
@@ -363,3 +427,4 @@ Sincerely,
 ${d.name}`;
   }
 }
+
