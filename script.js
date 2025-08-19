@@ -297,17 +297,6 @@ function aiqynSetNotif(on=true){
   fab.classList.toggle("has-notif", !!on);
 }
 function aiqynClearNotif(){ aiqynSetNotif(false); }
-// ============== Theme toggle (System / Light / Dark) — no HTML edits ==============
-(function(){
-  const THEME_KEY = "aiqynai_theme"; // 'system' | 'light' | 'dark'
-  const media = window.matchMedia("(prefers-color-scheme: dark)");
-  const MODES = ["system","light","dark"];
-  const ICON  = { system:"🖥️", light:"☀️", dark:"🌙" };
-  const LABEL = {
-    system: "Theme: System (auto)",
-    light:  "Theme: Light",
-    dark:   "Theme: Dark"
-  };
 
   function loadPref(){ return localStorage.getItem(THEME_KEY) || "system"; }
   function savePref(v){ localStorage.setItem(THEME_KEY, v); }
