@@ -1,6 +1,6 @@
 /* ====================================================================
    AiqynAI • Glass + Ornaments + Sticky Footer + iOS Theme Switch
-   (Chat panel follows FAB) • Spacing tuned for panels/forms
+   (Chat panel follows FAB) • Spacing tuned • AI page XL chat
    ==================================================================== */
 
 /* --------- THEME TOKENS --------- */
@@ -28,11 +28,10 @@
     --glass-blur:14px;
   }
 }
-/* Manual overrides */
 body.theme-light{ color-scheme:light; }
 body.theme-dark { color-scheme:dark; }
 
-/* --------- RESET & LAYOUT (sticky footer) --------- */
+/* --------- RESET & LAYOUT --------- */
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{
@@ -135,10 +134,8 @@ code,kbd{background:rgba(148,163,184,.15);padding:.1em .45em;border-radius:8px}
 .card h3{margin:0 0 8px}
 .list{padding-left:22px}
 
-/* --------- PANELS / FORMS (больше «воздуха») --------- */
-.panel{
-  padding:22px 22px;
-}
+/* --------- PANELS / FORMS --------- */
+.panel{ padding:22px 22px; }
 .panel .row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
 input[type="text"],input[type="email"],input[type="password"],select,textarea{
   width:100%;color:var(--ink);
@@ -159,6 +156,7 @@ input:focus,select:focus,textarea:focus{
 /* --------- CHAT (ai.html) --------- */
 .chat{max-width:860px;margin:22px auto}
 .chat-window{height:440px;overflow-y:auto;padding:16px}
+.chat--xl .chat-window{height:640px;} /* <<< увеличенное окно на странице AI */
 .msg{margin:10px 0;display:flex;gap:10px}
 .msg.me{justify-content:flex-end}
 .bubble{
@@ -203,9 +201,9 @@ body.ai-ready .ai-fab{display:grid}
   content:""; position:absolute; top:-2px; right:-2px; width:12px; height:12px; border-radius:50%;
   background:var(--accent); box-shadow:0 0 0 0 rgba(242,193,78,.45); animation:aiqyn-ping 1.6s cubic-bezier(0,0,.2,1) infinite;
 }
-@keyframes aiqyn-ping{0%{box-shadow:0 0 0 0 rgba(242,193,78,.45);transform:scale(1)}70%{box-shadow:0 0 0 12px rgba(242,193,78,0);transform:scale(1.08)}100%{box-shadow:0 0 0 0 rgba(242,193,78,0);transform:scale(1)}}
+@keyframes aiqyn-ping{0%{box-shadow:0 0 0 0 rgba(242,193,78,.45);transform:scale(1)}70%{box-shadow:0 0 0 12px rgba(242,193,78,0);transform:scale(1.08)}100%{box-shadow:0 0 0 0 rgba(242,193,78,0);transform:scale(1)}
 
-/* Панель позиционируется JS-ом рядом с FAB */
+/* Панель около FAB (позиция задаёт JS) */
 .ai-panel{
   position:fixed; z-index:60;
   width:380px; max-width:calc(100vw - 32px); height:480px;
@@ -245,8 +243,10 @@ body.ai-open .ai-panel{opacity:1; transform:translateY(0) scale(1); pointer-even
 .badge{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.35))}
 .profile-form .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
 
-/* --------- ACCESSIBILITY --------- */
-a:focus-visible,button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
-  outline:none; box-shadow:var(--focus); border-color:var(--brand); border-radius:12px;
+/* --- Специфические правки для модала Профиль: центр по вертикали и ограничение высоты --- */
+#profileModal{
+  top:50% !important;
+  transform:translateY(-50%);
+  max-height:70vh;
+  overflow:auto;
 }
-
