@@ -1,5 +1,5 @@
 Hi! I’m Daniyar, 23 years old.
-I’m building an educational platform-ecosystem "AiqynAi" for high school and college students to help them with university admissions.
+I’m building an educational platform-ecosystem "AiqynAI" for high school and college students to help them with university admissions.
 
 📚 The platform will include:
 
