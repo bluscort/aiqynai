@@ -1,46 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AiqynAI — Главная</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<header class="site-header">
-  <div class="brand"><span class="logo">✨</span><span class="title">AiqynAI</span></div>
-  <nav class="nav">
-    <a href="index.html" class="active">Главная</a>
-    <a href="tests.html">Тесты</a>
-    <a href="universities.html">Университеты</a>
-    <a href="blog.html">Блог</a>
-    <a href="assistant.html">Ассистент</a>
-    <a href="pricing.html">Цены</a>
-    <a href="contacts.html">Контакты</a>
-    <a href="faq.html">FAQ</a>
-    <a href="ai.html" class="ai-link">AI</a>
-  </nav>
-  <div class="actions">
-    <a id="pointsDisplay" class="points" href="rewards.html" title="Награды">⭐ 0</a>
-    <a href="profile.html" class="profile-icon" title="Профиль">👤</a>
-  </div>
-</header>
+  <header class="site-header">
+    <div class="brand" tabindex="0" aria-label="Домой">
+      <div class="logo">AI</div>
+      <div class="title">AiqynAI</div>
+    </div>
+    <nav class="nav">
+      <a href="index.html" class="active">Главная</a>
+      <a href="tests.html">Тесты</a>
+      <a href="universities.html">Университеты</a>
+      <a href="blog.html">Блог</a>
+      <a href="ai.html">AI</a>
+      <a href="faq.html">FAQ</a>
+      <a href="about.html">О нас</a>
+      <a href="contacts.html">Контакты</a>
+      <a href="pricing.html">Подписка</a>
+      <a href="terms.html">Условия</a>
+      <a href="privacy.html">Конфиденциальность</a>
+    </nav>
+    <div class="header-right">
+      <button id="pointsDisplay" class="points" type="button" title="Награды">⭐ 0</button>
+      <button id="profileButton" class="icon-btn" type="button" title="Профиль" aria-label="Профиль">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.9 0 5-2.1 5-5s-2.1-5-5-5-5 2.1-5 5 2.1 5 5 5zm0 2c-4 0-8 2-8 6v2h16v-2c0-4-4-6-8-6z"/></svg>
+      </button>
+    </div>
+  </header>
 
-<main class="container">
-  <h1>Clear path to university — powered by AI</h1>
-  <p>Готовься к ЕНТ, IELTS, SAT. Узнавай про вузы. Генерируй письма. ИИ-помощник всегда рядом.</p>
-  <div class="grid">
-    <a class="card" href="tests.html"><h3>Тесты →</h3><p>ЕНТ, IELTS, SAT — пробники и разбор (демо).</p></a>
-    <a class="card" href="universities.html"><h3>Университеты →</h3><p>Рейтинг и требования.</p></a>
-    <a class="card" href="blog.html"><h3>Блог →</h3><p>Советы и истории поступления.</p></a>
-  </div>
-  <p style="margin-top:16px">
-    <a class="btn" href="ai.html">Спросить AI</a>
-    <a class="btn ghost" href="profile.html" style="margin-left:8px;">Мой профиль</a>
-  </p>
-</main>
+  <main class="container">
+    <h1>Ясный путь к поступлению</h1>
+    <p>Подготовка к ЕНТ, IELTS, SAT и помощь с поступлением в вузы — Казахстан и мир. Всё в одном месте, с поддержкой AI.</p>
+    <div class="grid">
+      <a class="card" href="tests.html"><h3>Тесты</h3><p>Практика и планы по ЕНТ, IELTS, SAT.</p></a>
+      <a class="card" href="universities.html"><h3>Университеты</h3><p>Подбор вузов и требования.</p></a>
+      <a class="card" href="ai.html"><h3>AI‑ассистент</h3><p>Вопросы, документы, письма.</p></a>
+      <a class="card" href="blog.html"><h3>Блог</h3><p>Опыт поступления и гайды.</p></a>
+    </div>
+  </main>
 
-<footer class="site-footer">© 2025 AiqynAI</footer>
-<script src="script.js"></script>
+  <footer class="site-footer">
+    <span>© AiqynAI. Все права защищены.</span>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
