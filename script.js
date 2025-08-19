@@ -161,13 +161,12 @@ function injectThemeSwitch(){
   media.addEventListener?.("change",()=>{ if(!getSaved()) sw.dataset.mode=sys(); });
 }
 
-/* ---------- FAB + FOLLOWING PANEL (fixed) ---------- */
+/* ---------- FAB + FOLLOWING PANEL ---------- */
 let aiPanelEl=null, aiFabEl=null;
 
 function setupFabAndPanel(){
   const body=document.body;
 
-  // FAB
   if(!document.querySelector(".ai-fab")){
     aiFabEl=document.createElement("button");
     aiFabEl.className="ai-fab"; aiFabEl.type="button"; aiFabEl.innerHTML="<span>AI</span>";
@@ -180,7 +179,7 @@ function setupFabAndPanel(){
       const open=body.classList.toggle("ai-open");
       if(open){
         aiqynClearNotif();
-        ensureAIPanel();            // <— создаём панель (не переопределяется!)
+        ensureAIPanel();
         positionPanelNearFab(true);
         setTimeout(()=>document.getElementById("aiqyn-fab-input")?.focus(),0);
       }
@@ -250,14 +249,13 @@ function positionPanelNearFab(animate=false){
   const pw=panel.offsetWidth||380, ph=panel.offsetHeight||480;
   const vw=innerWidth, vh=innerHeight;
 
-  // по умолчанию — над FAB, выравнивание справа
   let top = fr.top - ph - 10;
   let left = fr.left - pw + fr.width;
 
-  if(top < 8) top = fr.bottom + 10;           // если места сверху нет — открываем снизу
-  if(left + pw > vw - 8) left = vw - pw - 8;  // правый край
-  if(left < 8) left = 8;                      // левый край
-  if(top + ph > vh - 8) top = Math.max(8, vh - ph - 8); // низ
+  if(top < 8) top = fr.bottom + 10;
+  if(left + pw > vw - 8) left = vw - pw - 8;
+  if(left < 8) left = 8;
+  if(top + ph > vh - 8) top = Math.max(8, vh - ph - 8);
 
   panel.style.top = `${Math.round(top)}px`;
   panel.style.left = `${Math.round(left)}px`;
@@ -284,11 +282,11 @@ function makeDraggableFab(el, onMove){
   el.addEventListener("pointerdown",down); addEventListener("pointermove",move); addEventListener("pointerup",up);
 }
 
-/* ---------- FAB ping helpers ---------- */
+/* ---------- FAB ping ---------- */
 function aiqynSetNotif(on=true){ document.querySelector(".ai-fab")?.classList.toggle("has-notif", !!on); }
 function aiqynClearNotif(){ aiqynSetNotif(false); }
 
-/* ---------- Inline chat for ai.html (оставляем) ---------- */
+/* ---------- Inline chat for ai.html ---------- */
 (function(){
   const w=document.getElementById("chatWindow");
   const i=document.getElementById("chatInput");
